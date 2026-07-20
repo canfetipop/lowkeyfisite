@@ -1,0 +1,11 @@
+{
+  "title": "Current Explorations",
+  "slug": "current-explorations",
+  "published": true,
+  "date": "2026-07-20",
+  "category": "exploring",
+  "excerpt": "What I'm learning, playing, and exploring right now.",
+  "image": "/images/lab/exploring.png",
+  "imageAlt": "Pixel-art compass",
+  "body": "This space can hold notes about learning, gaming, hobbies, skills, and anything else you're curious about.\n\nAdd more entries from the admin editor whenever you want to document a new exploration."
+}

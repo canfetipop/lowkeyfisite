@@ -7,14 +7,6 @@ import {
   postCategories,
 } from "../../lib/content";
 
-const STATUS_ICONS = {
-  computer: "/images/sidebar/home.png",
-  learning: "/images/lab/learning.png",
-  reading: "/images/resources/books.png",
-  planning: "/images/posts/travel.png",
-  focus: "/images/posts/money.png",
-};
-
 export default function HomeView({ onNavigate }) {
   const latestPost = featuredPost;
   const latestCategory = postCategories.categories.find(
@@ -120,9 +112,7 @@ export default function HomeView({ onNavigate }) {
                 <span className="current-status-item__icon" aria-hidden="true">
                   <img
                     className="status-pixel-icon"
-                    src={assetUrl(
-                      STATUS_ICONS[statusItem.icon] ?? STATUS_ICONS.computer,
-                    )}
+                    src={assetUrl(statusItem.icon)}
                     alt=""
                   />
                 </span>

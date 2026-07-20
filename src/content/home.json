@@ -5,34 +5,22 @@
   "heroImageAlt": "Pixel-art scene of a person working beside a window overlooking a city at night",
   "currentStatus": [
     {
-      "id": "building",
-      "label": "Building:",
-      "value": "eliz.exe v1",
-      "icon": "computer"
-    },
-    {
-      "id": "learning",
-      "label": "Learning:",
-      "value": "Surfing",
-      "icon": "learning"
-    },
-    {
-      "id": "reading",
-      "label": "Reading:",
-      "value": "The Psychology of Money",
-      "icon": "reading"
+      "id": "exploring",
+      "label": "Exploring:",
+      "value": "Learning + hobbies",
+      "icon": "/images/lab/exploring.png"
     },
     {
       "id": "planning",
       "label": "Planning:",
       "value": "Bali trip",
-      "icon": "planning"
+      "icon": "/images/posts/travel.png"
     },
     {
-      "id": "focus",
-      "label": "Focus:",
-      "value": "Save, invest, grow",
-      "icon": "focus"
+      "id": "status",
+      "label": "Status:",
+      "value": "Student",
+      "icon": "/images/sidebar/about.png"
     }
   ]
 }

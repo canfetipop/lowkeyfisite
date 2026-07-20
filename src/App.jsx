@@ -27,6 +27,7 @@ const VIEW_COMPONENTS = {
 export default function LowkeyfiPage() {
   const [activeView, setActiveView] = useState("home");
   const [viewContext, setViewContext] = useState({});
+  const [navigationKey, setNavigationKey] = useState(0);
   const [windowScale, setWindowScale] = useState(1);
   const [scaleIsReady, setScaleIsReady] = useState(false);
 
@@ -54,6 +55,7 @@ export default function LowkeyfiPage() {
   function handleViewChange(viewId, nextContext = {}) {
     setActiveView(viewId);
     setViewContext(nextContext);
+    setNavigationKey((currentKey) => currentKey + 1);
   }
 
   function handleMinimize() {
@@ -112,6 +114,7 @@ export default function LowkeyfiPage() {
               <ActiveView
                 onNavigate={handleViewChange}
                 initialPostSlug={viewContext.postSlug}
+                navigationKey={navigationKey}
               />
             </section>
           </div>

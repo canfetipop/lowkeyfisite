@@ -8,7 +8,7 @@ import {
   posts,
 } from "../../lib/content";
 
-export default function PostsView({ initialPostSlug }) {
+export default function PostsView({ initialPostSlug, navigationKey }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedPostSlug, setSelectedPostSlug] = useState(initialPostSlug ?? null);
 
@@ -16,8 +16,11 @@ export default function PostsView({ initialPostSlug }) {
     if (initialPostSlug) {
       setSelectedPostSlug(initialPostSlug);
       setSelectedCategoryId(null);
+    } else {
+      setSelectedPostSlug(null);
+      setSelectedCategoryId(null);
     }
-  }, [initialPostSlug]);
+  }, [initialPostSlug, navigationKey]);
 
   const selectedPost = posts.find((post) => post.slug === selectedPostSlug);
   const selectedCategory = postCategories.categories.find(
@@ -26,6 +29,9 @@ export default function PostsView({ initialPostSlug }) {
   const categoryPosts = useMemo(
     () => posts.filter((post) => post.category === selectedCategoryId),
     [selectedCategoryId],
+  );
+  const visibleCategories = postCategories.categories.filter((category) =>
+    posts.some((post) => post.category === category.id),
   );
 
   if (selectedPost) {
@@ -125,7 +131,7 @@ export default function PostsView({ initialPostSlug }) {
       <p className="posts-view__intro">{postCategories.intro}</p>
 
       <div className="post-category-list">
-        {postCategories.categories.map((category) => (
+        {visibleCategories.map((category) => (
           <button
             key={category.id}
             type="button"

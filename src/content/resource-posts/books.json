@@ -1,0 +1,9 @@
+{
+  "title": "Books",
+  "slug": "books",
+  "published": true,
+  "category": "books",
+  "image": "/images/resources/books.png",
+  "imageAlt": "Pixel-art stack of books",
+  "body": "A growing list of books about finance, mindset, investing, and more. Add your recommendations from the admin editor."
+}

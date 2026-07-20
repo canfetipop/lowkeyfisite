@@ -1,0 +1,9 @@
+{
+  "title": "Other Recommendations",
+  "slug": "other",
+  "published": true,
+  "category": "other",
+  "image": "/images/resources/other.png",
+  "imageAlt": "Pixel-art star",
+  "body": "A home for useful things that don't fit the other resource categories."
+}

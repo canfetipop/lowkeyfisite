@@ -1,13 +1,4 @@
-import { assetUrl } from "../lib/content";
-
-export const navigation = [
-  { id: "home", label: "Home", icon: "/images/sidebar/home.png" },
-  { id: "about", label: "About", icon: "/images/sidebar/about.png" },
-  { id: "posts", label: "Posts", icon: "/images/sidebar/posts.png" },
-  { id: "lab", label: "Lab", icon: "/images/sidebar/lab.png" },
-  { id: "resources", label: "Resources", icon: "/images/sidebar/resources.png" },
-  { id: "contact", label: "Contact", icon: "/images/sidebar/contact.png" },
-];
+import { assetUrl, navigation } from "../lib/content";
 
 export default function Sidebar({ activeView, onNavigate }) {
   return (

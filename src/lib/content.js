@@ -5,8 +5,19 @@ import postCategoryContent from "../content/post-categories.json";
 import labContent from "../content/lab.json";
 import resourceContent from "../content/resources.json";
 import contactContent from "../content/contact.json";
+import navigationContent from "../content/navigation.json";
 
 const postModules = import.meta.glob("../content/posts/*.json", {
+  eager: true,
+  import: "default",
+});
+
+const labPostModules = import.meta.glob("../content/lab-posts/*.json", {
+  eager: true,
+  import: "default",
+});
+
+const resourcePostModules = import.meta.glob("../content/resource-posts/*.json", {
   eager: true,
   import: "default",
 });
@@ -18,6 +29,7 @@ export const postCategories = postCategoryContent;
 export const lab = labContent;
 export const resources = resourceContent;
 export const contact = contactContent;
+export const navigation = navigationContent;
 
 export const posts = Object.values(postModules)
   .filter((post) => post.published)
@@ -27,6 +39,19 @@ export const posts = Object.values(postModules)
 
 export const featuredPost =
   posts.find((post) => post.featured) ?? posts[0] ?? null;
+
+export const labPosts = sortPublishedEntries(Object.values(labPostModules));
+export const resourcePosts = sortPublishedEntries(
+  Object.values(resourcePostModules),
+);
+
+function sortPublishedEntries(entries) {
+  return entries
+    .filter((entry) => entry.published)
+    .sort((firstEntry, secondEntry) =>
+      (secondEntry.date ?? "").localeCompare(firstEntry.date ?? ""),
+    );
+}
 
 export function assetUrl(path) {
   if (!path || /^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith("data:")) {

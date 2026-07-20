@@ -42,6 +42,18 @@ content:
                 - { name: rounded, label: Rounded }
                 - { name: square, label: Classic square }
 
+  - name: navigation
+    label: Sidebar navigation
+    type: file
+    path: src/content/navigation.json
+    format: json
+    list: true
+    operations: { delete: false }
+    fields:
+      - { name: id, label: Page ID, type: string, required: true, readonly: true }
+      - { name: label, label: Sidebar label, type: string, required: true }
+      - { name: icon, label: Sidebar icon, type: image, required: true }
+
   - name: pages
     label: Pages
     type: group
@@ -59,16 +71,12 @@ content:
           - name: currentStatus
             label: Current status
             type: object
-            list: { min: 1, max: 5, collapsible: { collapsed: true, summary: "{label} {value}" } }
+            list: { min: 1, max: 3, collapsible: { collapsed: true, summary: "{label} {value}" } }
             fields:
               - { name: id, label: ID, type: string, required: true }
               - { name: label, label: Label, type: string, required: true }
               - { name: value, label: Value, type: string, required: true }
-              - name: icon
-                label: Icon
-                type: select
-                required: true
-                options: { values: [computer, learning, reading, planning, focus] }
+              - { name: icon, label: Icon image, type: image, required: true }
 
       - name: about
         label: About
@@ -198,3 +206,60 @@ content:
         type: text
         required: true
         description: "Separate paragraphs with a blank line."
+
+  - name: labPosts
+    label: Lab posts
+    type: collection
+    path: src/content/lab-posts
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, category, date, published]
+      sort: [date, title]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: slug, label: URL-friendly ID, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+      - { name: published, label: Published, type: boolean }
+      - { name: date, label: Publish date, type: date, required: true }
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values:
+            - { name: building, label: Building }
+            - { name: exploring, label: Exploring }
+            - { name: experiments, label: Experiments }
+      - { name: excerpt, label: Short description, type: text, required: true }
+      - { name: image, label: Cover image, type: image }
+      - { name: imageAlt, label: Cover image description, type: string }
+      - { name: body, label: Post content, type: text, required: true, description: "Separate paragraphs with a blank line." }
+
+  - name: resourcePosts
+    label: Resource pages
+    type: collection
+    path: src/content/resource-posts
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, category, published]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: slug, label: URL-friendly ID, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+      - { name: published, label: Published, type: boolean }
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values:
+            - { name: books, label: Books }
+            - { name: tools, label: Tools / Apps }
+            - { name: equipment, label: Equipment }
+            - { name: other, label: Other Recommendations }
+      - { name: image, label: Main image, type: image }
+      - { name: imageAlt, label: Image description, type: string }
+      - { name: body, label: Page content, type: text, required: true, description: "Separate paragraphs with a blank line." }
