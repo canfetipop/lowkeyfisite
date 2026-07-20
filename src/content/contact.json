@@ -1,0 +1,39 @@
+{
+  "heading": "CONTACT",
+  "intro": "Let's connect!",
+  "links": [
+    {
+      "id": "email",
+      "label": "Email",
+      "handle": "hello@elizt.com",
+      "url": "mailto:hello@elizt.com",
+      "icon": "/images/contact/email.png",
+      "openInNewTab": false
+    },
+    {
+      "id": "discord",
+      "label": "Discord",
+      "handle": "elizt",
+      "url": "https://discord.com/",
+      "icon": "/images/contact/discord.png",
+      "openInNewTab": true
+    },
+    {
+      "id": "youtube",
+      "label": "YouTube",
+      "handle": "@elizt",
+      "url": "https://www.youtube.com/@elizt",
+      "icon": "/images/contact/youtube.png",
+      "openInNewTab": true
+    }
+  ],
+  "support": {
+    "enabled": true,
+    "heading": "SUPPORT ELIZ.EXE",
+    "description": "If this space helped you, you can support the project.",
+    "image": "/images/contact/ko-fi.png",
+    "imageAlt": "A pixel-art coffee mug with a heart",
+    "buttonLabel": "Support on Ko-fi",
+    "url": "https://ko-fi.com/elizt"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "heading": "LAB",
+  "intro": "Things I'm building, learning, and exploring.",
+  "categories": [
+    {
+      "id": "building",
+      "title": "Building",
+      "description": "Websites, tools, templates, and side projects.",
+      "icon": "/images/lab/building.png"
+    },
+    {
+      "id": "learning",
+      "title": "Learning",
+      "description": "Surfing, languages, skills, and personal growth.",
+      "icon": "/images/lab/learning.png"
+    },
+    {
+      "id": "hobbies",
+      "title": "Hobbies",
+      "description": "Gaming, cooking, photography, writing, and more.",
+      "icon": "/images/lab/hobbies.png"
+    },
+    {
+      "id": "experiments",
+      "title": "Experiments",
+      "description": "Challenges, systems, and life experiments.",
+      "icon": "/images/lab/experiments.png"
+    }
+  ]
+}

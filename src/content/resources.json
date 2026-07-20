@@ -1,0 +1,30 @@
+{
+  "heading": "RESOURCES",
+  "intro": "Books, tools, and things I recommend.",
+  "categories": [
+    {
+      "id": "books",
+      "title": "Books",
+      "description": "Finance, mindset, investing, and more.",
+      "icon": "/images/resources/books.png"
+    },
+    {
+      "id": "tools",
+      "title": "Tools / Apps",
+      "description": "Apps, software, and tools that help me.",
+      "icon": "/images/resources/tools.png"
+    },
+    {
+      "id": "equipment",
+      "title": "Equipment",
+      "description": "Gear and setups I use and recommend.",
+      "icon": "/images/resources/equipment.png"
+    },
+    {
+      "id": "other",
+      "title": "Other Recommendations",
+      "description": "Random things worth sharing.",
+      "icon": "/images/resources/other.png"
+    }
+  ]
+}

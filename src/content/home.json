@@ -1,0 +1,38 @@
+{
+  "heading": "HOME",
+  "description": "notes on money, projects,\ntravel, and becoming.",
+  "heroImage": "/images/hero-night.png",
+  "heroImageAlt": "Pixel-art scene of a person working beside a window overlooking a city at night",
+  "currentStatus": [
+    {
+      "id": "building",
+      "label": "Building:",
+      "value": "eliz.exe v1",
+      "icon": "computer"
+    },
+    {
+      "id": "learning",
+      "label": "Learning:",
+      "value": "Surfing",
+      "icon": "learning"
+    },
+    {
+      "id": "reading",
+      "label": "Reading:",
+      "value": "The Psychology of Money",
+      "icon": "reading"
+    },
+    {
+      "id": "planning",
+      "label": "Planning:",
+      "value": "Bali trip",
+      "icon": "planning"
+    },
+    {
+      "id": "focus",
+      "label": "Focus:",
+      "value": "Save, invest, grow",
+      "icon": "focus"
+    }
+  ]
+}

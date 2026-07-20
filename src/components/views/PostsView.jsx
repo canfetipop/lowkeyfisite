@@ -1,53 +1,140 @@
+import { useEffect, useMemo, useState } from "react";
+
 import SectionHeading from "../SectionHeading";
+import {
+  assetUrl,
+  formatPostDate,
+  postCategories,
+  posts,
+} from "../../lib/content";
 
-const postCategories = [
-  {
-    id: "money",
-    title: "Money",
-    description: "Budgeting, saving, investing, FIRE, and money notes.",
-    icon: "/images/posts/money.png",
-  },
-  {
-    id: "travel",
-    title: "Travel",
-    description: "Trips, costs, itineraries, and travel reflections.",
-    icon: "/images/posts/travel.png",
-  },
-  {
-    id: "life-notes",
-    title: "Life Notes",
-    description: "Personal essays, habits, routines, and reflections.",
-    icon: "/images/posts/life-notes.png",
-  },
-  {
-    id: "guides",
-    title: "Guides",
-    description: "How-to guides and helpful setup posts.",
-    icon: "/images/posts/guides.png",
-  },
-];
+export default function PostsView({ initialPostSlug }) {
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedPostSlug, setSelectedPostSlug] = useState(initialPostSlug ?? null);
 
-export default function PostsView() {
+  useEffect(() => {
+    if (initialPostSlug) {
+      setSelectedPostSlug(initialPostSlug);
+      setSelectedCategoryId(null);
+    }
+  }, [initialPostSlug]);
+
+  const selectedPost = posts.find((post) => post.slug === selectedPostSlug);
+  const selectedCategory = postCategories.categories.find(
+    (category) => category.id === selectedCategoryId,
+  );
+  const categoryPosts = useMemo(
+    () => posts.filter((post) => post.category === selectedCategoryId),
+    [selectedCategoryId],
+  );
+
+  if (selectedPost) {
+    return (
+      <article className="post-reader">
+        <button
+          className="post-view-back"
+          type="button"
+          onClick={() => {
+            setSelectedPostSlug(null);
+            setSelectedCategoryId(selectedPost.category);
+          }}
+        >
+          ← Back to posts
+        </button>
+
+        <SectionHeading as="h1" size="large" showRule>
+          {selectedPost.title}
+        </SectionHeading>
+
+        <div className="post-reader__metadata">
+          <span>{formatPostDate(selectedPost.date)}</span>
+          <span>•</span>
+          <span>{categoryTitle(selectedPost.category)}</span>
+        </div>
+
+        {selectedPost.image && (
+          <img
+            className="post-reader__image"
+            src={assetUrl(selectedPost.image)}
+            alt={selectedPost.imageAlt}
+          />
+        )}
+
+        <div className="post-reader__body">
+          {selectedPost.body.split(/\n\s*\n/).map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      </article>
+    );
+  }
+
+  if (selectedCategory) {
+    return (
+      <div className="posts-view">
+        <button
+          className="post-view-back"
+          type="button"
+          onClick={() => setSelectedCategoryId(null)}
+        >
+          ← All categories
+        </button>
+
+        <SectionHeading as="h1" size="large" showRule>
+          {selectedCategory.title}
+        </SectionHeading>
+
+        <p className="posts-view__intro">{selectedCategory.description}</p>
+
+        <div className="post-entry-list">
+          {categoryPosts.length ? (
+            categoryPosts.map((post) => (
+              <button
+                className="post-entry-card"
+                key={post.slug}
+                type="button"
+                onClick={() => setSelectedPostSlug(post.slug)}
+              >
+                {post.image && (
+                  <img src={assetUrl(post.image)} alt="" aria-hidden="true" />
+                )}
+                <span className="post-entry-card__content">
+                  <strong>{post.title}</strong>
+                  <small>{formatPostDate(post.date)}</small>
+                  <span>{post.excerpt}</span>
+                </span>
+                <span className="post-category-card__arrow" aria-hidden="true">›</span>
+              </button>
+            ))
+          ) : (
+            <div className="post-empty-state">
+              No published posts yet. Add the first one from the admin editor.
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="posts-view">
       <SectionHeading as="h1" size="large" showRule>
-        POSTS
+        {postCategories.heading}
       </SectionHeading>
 
-      <p className="posts-view__intro">
-        Thoughts, updates, guides, and lessons.
-      </p>
+      <p className="posts-view__intro">{postCategories.intro}</p>
 
       <div className="post-category-list">
-        {postCategories.map((category) => (
+        {postCategories.categories.map((category) => (
           <button
             key={category.id}
             type="button"
             className="post-category-card"
             aria-label={`Open ${category.title} posts`}
+            onClick={() => setSelectedCategoryId(category.id)}
           >
             <span className="post-category-card__icon" aria-hidden="true">
-              <img src={category.icon} alt="" draggable="false" />
+              <img src={assetUrl(category.icon)} alt="" draggable="false" />
             </span>
 
             <span className="post-category-card__content">
@@ -55,12 +142,17 @@ export default function PostsView() {
               <span>{category.description}</span>
             </span>
 
-            <span className="post-category-card__arrow" aria-hidden="true">
-              ›
-            </span>
+            <span className="post-category-card__arrow" aria-hidden="true">›</span>
           </button>
         ))}
       </div>
     </div>
+  );
+}
+
+function categoryTitle(categoryId) {
+  return (
+    postCategories.categories.find((category) => category.id === categoryId)
+      ?.title ?? categoryId
   );
 }

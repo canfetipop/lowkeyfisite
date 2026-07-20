@@ -1,53 +1,27 @@
 import SectionHeading from "../SectionHeading";
-
-const contactLinks = [
-  {
-    id: "email",
-    label: "Email",
-    handle: "hello@elizt.com",
-    href: "mailto:hello@elizt.com",
-    icon: "/images/contact/email.png",
-    external: false,
-  },
-  {
-    id: "discord",
-    label: "Discord",
-    handle: "elizt",
-    href: "https://discord.com/",
-    icon: "/images/contact/discord.png",
-    external: true,
-  },
-  {
-    id: "youtube",
-    label: "YouTube",
-    handle: "@elizt",
-    href: "https://www.youtube.com/@elizt",
-    icon: "/images/contact/youtube.png",
-    external: true,
-  },
-];
+import { assetUrl, contact } from "../../lib/content";
 
 export default function ContactView() {
   return (
     <div className="contact-view">
       <SectionHeading as="h1" size="large" showRule>
-        CONTACT
+        {contact.heading}
       </SectionHeading>
 
-      <p className="contact-view__intro">Let&apos;s connect!</p>
+      <p className="contact-view__intro">{contact.intro}</p>
 
       <div className="contact-view__layout">
         <div className="contact-link-list">
-          {contactLinks.map((link) => (
+          {contact.links.map((link) => (
             <a
               className="contact-link"
-              href={link.href}
+              href={link.url}
               key={link.id}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noreferrer" : undefined}
+              target={link.openInNewTab ? "_blank" : undefined}
+              rel={link.openInNewTab ? "noreferrer" : undefined}
             >
               <span className="contact-link__icon" aria-hidden="true">
-                <img src={link.icon} alt="" />
+                <img src={assetUrl(link.icon)} alt="" />
               </span>
 
               <span className="contact-link__content">
@@ -58,23 +32,25 @@ export default function ContactView() {
           ))}
         </div>
 
+        {contact.support.enabled && (
         <aside className="support-card" aria-labelledby="support-card-title">
-          <h2 id="support-card-title">SUPPORT ELIZ.EXE</h2>
-          <p>If this space helped you, you can support the project.</p>
+          <h2 id="support-card-title">{contact.support.heading}</h2>
+          <p>{contact.support.description}</p>
           <img
             className="support-card__image"
-            src="/images/contact/ko-fi.png"
-            alt="A pixel-art coffee mug with a heart"
+            src={assetUrl(contact.support.image)}
+            alt={contact.support.imageAlt}
           />
           <a
             className="support-card__link"
-            href="https://ko-fi.com/elizt"
+            href={contact.support.url}
             target="_blank"
             rel="noreferrer"
           >
-            Support on Ko-fi
+            {contact.support.buttonLabel}
           </a>
         </aside>
+        )}
       </div>
     </div>
   );

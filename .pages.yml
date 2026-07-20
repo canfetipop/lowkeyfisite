@@ -1,0 +1,200 @@
+media:
+  input: public/images/uploads
+  output: /images/uploads
+  categories: [image]
+  extensions: [png, jpg, jpeg, webp, gif]
+  rename: safe
+
+settings:
+  content:
+    merge: true
+  commit:
+    identity: user
+
+content:
+  - name: settings
+    label: Site settings
+    type: file
+    path: src/content/site.json
+    format: json
+    fields:
+      - { name: windowTitle, label: Window title, type: string, required: true }
+      - { name: statusText, label: Status bar text, type: string, required: true }
+      - { name: lastUpdated, label: Last updated text, type: string, required: true }
+      - name: theme
+        label: Theme
+        type: object
+        fields:
+          - name: accentColor
+            label: Main blue color
+            type: string
+            required: true
+            pattern: { regex: "^#[0-9a-fA-F]{6}$", message: "Use a hex color such as #001d8f." }
+          - { name: accentColorLight, label: Lighter blue color, type: string, required: true, pattern: "^#[0-9a-fA-F]{6}$" }
+          - { name: windowColor, label: Window color, type: string, required: true, pattern: "^#[0-9a-fA-F]{6}$" }
+          - { name: pageBackground, label: Outside background, type: string, required: true, pattern: "^#[0-9a-fA-F]{6}$" }
+          - name: cornerStyle
+            label: Corner style
+            type: select
+            required: true
+            options:
+              values:
+                - { name: rounded, label: Rounded }
+                - { name: square, label: Classic square }
+
+  - name: pages
+    label: Pages
+    type: group
+    items:
+      - name: home
+        label: Home
+        type: file
+        path: src/content/home.json
+        format: json
+        fields:
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: description, label: Introduction, type: text, required: true }
+          - { name: heroImage, label: Hero image, type: image, required: true }
+          - { name: heroImageAlt, label: Hero image description, type: string, required: true }
+          - name: currentStatus
+            label: Current status
+            type: object
+            list: { min: 1, max: 5, collapsible: { collapsed: true, summary: "{label} {value}" } }
+            fields:
+              - { name: id, label: ID, type: string, required: true }
+              - { name: label, label: Label, type: string, required: true }
+              - { name: value, label: Value, type: string, required: true }
+              - name: icon
+                label: Icon
+                type: select
+                required: true
+                options: { values: [computer, learning, reading, planning, focus] }
+
+      - name: about
+        label: About
+        type: file
+        path: src/content/about.json
+        format: json
+        fields:
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: image, label: Main image, type: image, required: true }
+          - { name: imageAlt, label: Image description, type: string, required: true }
+          - { name: paragraphs, label: Paragraphs, type: text, list: true, required: true }
+
+      - name: postCategories
+        label: Post categories
+        type: file
+        path: src/content/post-categories.json
+        format: json
+        fields:
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: intro, label: Introduction, type: text, required: true }
+          - name: categories
+            label: Categories
+            type: object
+            list: { min: 1, collapsible: { collapsed: true, summary: "{title}" } }
+            fields: &category_fields
+              - { name: id, label: ID, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+              - { name: title, label: Title, type: string, required: true }
+              - { name: description, label: Description, type: text, required: true }
+              - { name: icon, label: Icon, type: image, required: true }
+
+      - name: lab
+        label: Lab
+        type: file
+        path: src/content/lab.json
+        format: json
+        fields:
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: intro, label: Introduction, type: text, required: true }
+          - name: categories
+            label: Categories
+            type: object
+            list: { min: 1, collapsible: { collapsed: true, summary: "{title}" } }
+            fields: *category_fields
+
+      - name: resources
+        label: Resources
+        type: file
+        path: src/content/resources.json
+        format: json
+        fields:
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: intro, label: Introduction, type: text, required: true }
+          - name: categories
+            label: Categories
+            type: object
+            list: { min: 1, collapsible: { collapsed: true, summary: "{title}" } }
+            fields: *category_fields
+
+      - name: contact
+        label: Contact
+        type: file
+        path: src/content/contact.json
+        format: json
+        fields:
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: intro, label: Introduction, type: string, required: true }
+          - name: links
+            label: Contact links
+            type: object
+            list: { min: 1, collapsible: { collapsed: true, summary: "{label}" } }
+            fields:
+              - { name: id, label: ID, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+              - { name: label, label: Label, type: string, required: true }
+              - { name: handle, label: Display text, type: string, required: true }
+              - { name: url, label: Link URL, type: string, required: true }
+              - { name: icon, label: Icon, type: image, required: true }
+              - { name: openInNewTab, label: Open in a new tab, type: boolean }
+          - name: support
+            label: Support card
+            type: object
+            fields:
+              - { name: enabled, label: Show support card, type: boolean }
+              - { name: heading, label: Heading, type: string, required: true }
+              - { name: description, label: Description, type: text, required: true }
+              - { name: image, label: Image, type: image, required: true }
+              - { name: imageAlt, label: Image description, type: string, required: true }
+              - { name: buttonLabel, label: Button label, type: string, required: true }
+              - { name: url, label: Support URL, type: string, required: true }
+
+  - name: posts
+    label: Posts
+    type: collection
+    path: src/content/posts
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, category, date, published, featured]
+      sort: [date, title]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - name: slug
+        label: URL-friendly ID
+        type: string
+        required: true
+        description: "Lowercase letters, numbers, and hyphens only."
+        pattern: { regex: "^[a-z0-9-]+$", message: "Use lowercase letters, numbers, and hyphens only." }
+      - { name: published, label: Published, type: boolean }
+      - { name: featured, label: Feature on homepage, type: boolean }
+      - { name: date, label: Publish date, type: date, required: true }
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values:
+            - { name: money, label: Money }
+            - { name: travel, label: Travel }
+            - { name: life-notes, label: Life Notes }
+            - { name: guides, label: Guides }
+      - { name: excerpt, label: Short description, type: text, required: true }
+      - { name: image, label: Cover image, type: image }
+      - { name: imageAlt, label: Cover image description, type: string }
+      - name: body
+        label: Post content
+        type: text
+        required: true
+        description: "Separate paragraphs with a blank line."

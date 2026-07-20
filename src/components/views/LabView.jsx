@@ -1,52 +1,26 @@
 import SectionHeading from "../SectionHeading";
-
-const labCategories = [
-  {
-    id: "building",
-    title: "Building",
-    description: "Websites, tools, templates, and side projects.",
-    icon: "/images/lab/building.png",
-  },
-  {
-    id: "learning",
-    title: "Learning",
-    description: "Surfing, languages, skills, and personal growth.",
-    icon: "/images/lab/learning.png",
-  },
-  {
-    id: "hobbies",
-    title: "Hobbies",
-    description: "Gaming, cooking, photography, writing, and more.",
-    icon: "/images/lab/hobbies.png",
-  },
-  {
-    id: "experiments",
-    title: "Experiments",
-    description: "Challenges, systems, and life experiments.",
-    icon: "/images/lab/experiments.png",
-  },
-];
+import { assetUrl, lab } from "../../lib/content";
 
 export default function LabView() {
   return (
     <div className="lab-view">
       <SectionHeading as="h1" size="large" showRule>
-        LAB
+        {lab.heading}
       </SectionHeading>
 
       <p className="lab-view__intro">
-        Things I&apos;m building, learning, and exploring.
+        {lab.intro}
       </p>
 
       <div className="post-category-list">
-        {labCategories.map((category) => (
+        {lab.categories.map((category) => (
           <button
             className="post-category-card lab-category-card"
             key={category.id}
             type="button"
           >
             <span className="post-category-card__icon" aria-hidden="true">
-              <img src={category.icon} alt="" />
+              <img src={assetUrl(category.icon)} alt="" draggable="false" />
             </span>
 
             <span className="post-category-card__content">

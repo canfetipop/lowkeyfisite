@@ -1,0 +1,30 @@
+{
+  "heading": "POSTS",
+  "intro": "Thoughts, updates, guides, and lessons.",
+  "categories": [
+    {
+      "id": "money",
+      "title": "Money",
+      "description": "Budgeting, saving, investing, FIRE, and money notes.",
+      "icon": "/images/posts/money.png"
+    },
+    {
+      "id": "travel",
+      "title": "Travel",
+      "description": "Trips, costs, itineraries, and travel reflections.",
+      "icon": "/images/posts/travel.png"
+    },
+    {
+      "id": "life-notes",
+      "title": "Life Notes",
+      "description": "Personal essays, habits, routines, and reflections.",
+      "icon": "/images/posts/life-notes.png"
+    },
+    {
+      "id": "guides",
+      "title": "Guides",
+      "description": "How-to guides and helpful setup posts.",
+      "icon": "/images/posts/guides.png"
+    }
+  ]
+}

@@ -1,45 +1,19 @@
 import SectionHeading from "../SectionHeading";
-
-const resourceCategories = [
-  {
-    id: "books",
-    title: "Books",
-    description: "Finance, mindset, investing, and more.",
-    icon: "/images/resources/books.png",
-  },
-  {
-    id: "tools",
-    title: "Tools / Apps",
-    description: "Apps, software, and tools that help me.",
-    icon: "/images/resources/tools.png",
-  },
-  {
-    id: "equipment",
-    title: "Equipment",
-    description: "Gear and setups I use and recommend.",
-    icon: "/images/resources/equipment.png",
-  },
-  {
-    id: "other",
-    title: "Other Recommendations",
-    description: "Random things worth sharing.",
-    icon: "/images/resources/other.png",
-  },
-];
+import { assetUrl, resources } from "../../lib/content";
 
 export default function ResourcesView() {
   return (
     <div className="resources-view">
       <SectionHeading as="h1" size="large" showRule>
-        RESOURCES
+        {resources.heading}
       </SectionHeading>
 
       <p className="resources-view__intro">
-        Books, tools, and things I recommend.
+        {resources.intro}
       </p>
 
       <div className="post-category-list resource-category-list">
-        {resourceCategories.map((category) => (
+        {resources.categories.map((category) => (
           <button
             key={category.id}
             type="button"
@@ -47,7 +21,7 @@ export default function ResourcesView() {
             aria-label={`Open ${category.title}`}
           >
             <span className="post-category-card__icon" aria-hidden="true">
-              <img src={category.icon} alt="" draggable="false" />
+              <img src={assetUrl(category.icon)} alt="" draggable="false" />
             </span>
 
             <span className="post-category-card__content">

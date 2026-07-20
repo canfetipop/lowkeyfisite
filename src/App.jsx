@@ -10,6 +10,7 @@ import HomeView from "./components/views/HomeView";
 import LabView from "./components/views/LabView";
 import PostsView from "./components/views/PostsView";
 import ResourcesView from "./components/views/ResourcesView";
+import { site } from "./lib/content";
 
 const DESIGN_WIDTH = 1920;
 const DESIGN_HEIGHT = 1080;
@@ -25,6 +26,7 @@ const VIEW_COMPONENTS = {
 
 export default function LowkeyfiPage() {
   const [activeView, setActiveView] = useState("home");
+  const [viewContext, setViewContext] = useState({});
   const [windowScale, setWindowScale] = useState(1);
   const [scaleIsReady, setScaleIsReady] = useState(false);
 
@@ -49,8 +51,9 @@ export default function LowkeyfiPage() {
 
   const ActiveView = VIEW_COMPONENTS[activeView] ?? HomeView;
 
-  function handleViewChange(viewId) {
+  function handleViewChange(viewId, nextContext = {}) {
     setActiveView(viewId);
+    setViewContext(nextContext);
   }
 
   function handleMinimize() {
@@ -66,7 +69,17 @@ export default function LowkeyfiPage() {
   }
 
   return (
-    <main className="site-stage">
+    <main
+      className="site-stage"
+      style={{
+        "--windows-blue": site.theme.accentColor,
+        "--windows-blue-light": site.theme.accentColorLight,
+        "--windows-gray": site.theme.windowColor,
+        "--stage-background": site.theme.pageBackground,
+        "--panel-radius":
+          site.theme.cornerStyle === "square" ? "2px" : "10px",
+      }}
+    >
       <div
         className="scaled-window-frame"
         style={{
@@ -83,7 +96,7 @@ export default function LowkeyfiPage() {
           }}
         >
           <WindowChrome
-            title="eliz.exe"
+            title={site.windowTitle}
             onMinimize={handleMinimize}
             onMaximize={handleMaximize}
             onClose={handleClose}
@@ -96,13 +109,16 @@ export default function LowkeyfiPage() {
             />
 
             <section className="view-area">
-              <ActiveView onNavigate={handleViewChange} />
+              <ActiveView
+                onNavigate={handleViewChange}
+                initialPostSlug={viewContext.postSlug}
+              />
             </section>
           </div>
 
           <StatusBar
-            statusText="Ready"
-            lastUpdated="May 27, 2025"
+            statusText={site.statusText}
+            lastUpdated={site.lastUpdated}
           />
         </section>
       </div>
