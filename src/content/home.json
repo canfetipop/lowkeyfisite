@@ -7,20 +7,17 @@
     {
       "id": "exploring",
       "label": "Exploring:",
-      "value": "Learning + hobbies",
-      "icon": "/images/lab/exploring.png"
+      "value": "Learning + hobbies"
     },
     {
       "id": "planning",
       "label": "Planning:",
-      "value": "Bali trip",
-      "icon": "/images/posts/travel.png"
+      "value": "Bali trip"
     },
     {
       "id": "status",
       "label": "Status:",
-      "value": "Student",
-      "icon": "/images/sidebar/about.png"
+      "value": "Student"
     }
   ]
 }

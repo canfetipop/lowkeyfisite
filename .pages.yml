@@ -19,8 +19,6 @@ content:
     format: json
     fields:
       - { name: windowTitle, label: Window title, type: string, required: true }
-      - { name: statusText, label: Status bar text, type: string, required: true }
-      - { name: lastUpdated, label: Last updated text, type: string, required: true }
       - name: theme
         label: Theme
         type: object
@@ -76,7 +74,6 @@ content:
               - { name: id, label: ID, type: string, required: true }
               - { name: label, label: Label, type: string, required: true }
               - { name: value, label: Value, type: string, required: true }
-              - { name: icon, label: Icon image, type: image, required: true }
 
       - name: about
         label: About
@@ -106,20 +103,6 @@ content:
               - { name: title, label: Title, type: string, required: true }
               - { name: description, label: Description, type: text, required: true }
               - { name: icon, label: Icon, type: image, required: true }
-
-      - name: lab
-        label: Lab
-        type: file
-        path: src/content/lab.json
-        format: json
-        fields:
-          - { name: heading, label: Heading, type: string, required: true }
-          - { name: intro, label: Introduction, type: text, required: true }
-          - name: categories
-            label: Categories
-            type: object
-            list: { min: 1, collapsible: { collapsed: true, summary: "{title}" } }
-            fields: *category_fields
 
       - name: resources
         label: Resources
@@ -196,49 +179,72 @@ content:
           values:
             - { name: money, label: Money }
             - { name: travel, label: Travel }
-            - { name: life-notes, label: Life Notes }
+            - { name: exploring, label: Exploring }
             - { name: guides, label: Guides }
       - { name: excerpt, label: Short description, type: text, required: true }
       - { name: image, label: Cover image, type: image }
       - { name: imageAlt, label: Cover image description, type: string }
-      - name: body
-        label: Post content
-        type: text
-        required: true
-        description: "Separate paragraphs with a blank line."
-
-  - name: labPosts
-    label: Lab posts
-    type: collection
-    path: src/content/lab-posts
-    format: json
-    filename: "{primary}.json"
-    view:
-      primary: title
-      fields: [title, category, date, published]
-      sort: [date, title]
-      default: { sort: date, order: desc }
-    fields:
-      - { name: title, label: Title, type: string, required: true }
-      - { name: slug, label: URL-friendly ID, type: string, required: true, pattern: "^[a-z0-9-]+$" }
-      - { name: published, label: Published, type: boolean }
-      - { name: date, label: Publish date, type: date, required: true }
-      - name: category
-        label: Category
+      - name: coverPosition
+        label: Legacy cover position
         type: select
-        required: true
+        default: right
         options:
           values:
-            - { name: building, label: Building }
-            - { name: exploring, label: Exploring }
-            - { name: experiments, label: Experiments }
-      - { name: excerpt, label: Short description, type: text, required: true }
-      - { name: image, label: Cover image, type: image }
-      - { name: imageAlt, label: Cover image description, type: string }
-      - { name: body, label: Post content, type: text, required: true, description: "Separate paragraphs with a blank line." }
+            - { name: right, label: Right of text }
+            - { name: left, label: Left of text }
+      - name: coverSize
+        label: Legacy cover size
+        type: select
+        default: medium
+        options:
+          values:
+            - { name: small, label: Small }
+            - { name: medium, label: Medium }
+            - { name: large, label: Large }
+      - name: body
+        label: Simple post content
+        type: text
+        description: "Optional. Use this for a simple article, or use Content sections below for richer layouts."
+      - name: sections
+        label: Content sections
+        type: object
+        list: { collapsible: { collapsed: true, summary: "{type}" } }
+        description: "Add text and images in any order. Text + image sections can place media on either side."
+        fields:
+          - name: type
+            label: Section type
+            type: select
+            required: true
+            default: text
+            options:
+              values:
+                - { name: text, label: Text only }
+                - { name: text-image, label: Text + image }
+                - { name: image, label: Image only }
+          - { name: text, label: Paragraphs, type: text, description: "Separate paragraphs with a blank line." }
+          - { name: image, label: Image, type: image }
+          - { name: imageAlt, label: Image description, type: string }
+          - { name: caption, label: Image caption, type: string }
+          - name: imagePosition
+            label: Image position
+            type: select
+            default: right
+            options:
+              values:
+                - { name: right, label: Right of text }
+                - { name: left, label: Left of text }
+          - name: size
+            label: Image size
+            type: select
+            default: medium
+            options:
+              values:
+                - { name: small, label: Small }
+                - { name: medium, label: Medium }
+                - { name: large, label: Large }
 
   - name: resourcePosts
-    label: Resource pages
+    label: Recommendations
     type: collection
     path: src/content/resource-posts
     format: json
@@ -262,4 +268,5 @@ content:
             - { name: other, label: Other Recommendations }
       - { name: image, label: Main image, type: image }
       - { name: imageAlt, label: Image description, type: string }
+      - { name: url, label: Recommendation link, type: string }
       - { name: body, label: Page content, type: text, required: true, description: "Separate paragraphs with a blank line." }

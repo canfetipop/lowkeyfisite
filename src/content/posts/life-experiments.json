@@ -2,10 +2,13 @@
   "title": "Life Experiments",
   "slug": "life-experiments",
   "published": true,
+  "featured": false,
   "date": "2026-07-20",
-  "category": "experiments",
+  "category": "exploring",
   "excerpt": "Small challenges and systems for learning what works.",
   "image": "/images/lab/experiments.png",
   "imageAlt": "Pixel-art laboratory flask",
+  "coverPosition": "right",
+  "coverSize": "small",
   "body": "Experiments are a place to record challenges, routines, systems, and what you learned from trying them.\n\nThis is starter copy that you can edit or replace from the admin."
 }

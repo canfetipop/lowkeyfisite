@@ -9,16 +9,16 @@
       "icon": "/images/posts/money.png"
     },
     {
+      "id": "exploring",
+      "title": "Exploring",
+      "description": "Projects, learning, hobbies, experiments, and personal growth.",
+      "icon": "/images/lab/exploring.png"
+    },
+    {
       "id": "travel",
       "title": "Travel",
       "description": "Trips, costs, itineraries, and travel reflections.",
       "icon": "/images/posts/travel.png"
-    },
-    {
-      "id": "life-notes",
-      "title": "Life Notes",
-      "description": "Personal essays, habits, routines, and reflections.",
-      "icon": "/images/posts/life-notes.png"
     },
     {
       "id": "guides",

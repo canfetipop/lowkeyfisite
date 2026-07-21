@@ -2,17 +2,11 @@ import siteContent from "../content/site.json";
 import homeContent from "../content/home.json";
 import aboutContent from "../content/about.json";
 import postCategoryContent from "../content/post-categories.json";
-import labContent from "../content/lab.json";
 import resourceContent from "../content/resources.json";
 import contactContent from "../content/contact.json";
 import navigationContent from "../content/navigation.json";
 
 const postModules = import.meta.glob("../content/posts/*.json", {
-  eager: true,
-  import: "default",
-});
-
-const labPostModules = import.meta.glob("../content/lab-posts/*.json", {
   eager: true,
   import: "default",
 });
@@ -26,7 +20,6 @@ export const site = siteContent;
 export const home = homeContent;
 export const about = aboutContent;
 export const postCategories = postCategoryContent;
-export const lab = labContent;
 export const resources = resourceContent;
 export const contact = contactContent;
 export const navigation = navigationContent;
@@ -40,7 +33,6 @@ export const posts = Object.values(postModules)
 export const featuredPost =
   posts.find((post) => post.featured) ?? posts[0] ?? null;
 
-export const labPosts = sortPublishedEntries(Object.values(labPostModules));
 export const resourcePosts = sortPublishedEntries(
   Object.values(resourcePostModules),
 );

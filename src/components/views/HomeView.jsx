@@ -103,25 +103,15 @@ export default function HomeView({ onNavigate }) {
 
           <div className="current-status-list">
             {home.currentStatus.map((statusItem) => (
-              <button
-                type="button"
+              <div
                 key={statusItem.id}
-                onClick={() => onNavigate("posts")}
                 className="current-status-item"
               >
-                <span className="current-status-item__icon" aria-hidden="true">
-                  <img
-                    className="status-pixel-icon"
-                    src={assetUrl(statusItem.icon)}
-                    alt=""
-                  />
-                </span>
-
                 <span className="current-status-item__text">
                   <strong>{statusItem.label}</strong>
                   <span>{statusItem.value}</span>
                 </span>
-              </button>
+              </div>
             ))}
           </div>
         </aside>
