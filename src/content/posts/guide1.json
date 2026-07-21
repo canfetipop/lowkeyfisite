@@ -12,7 +12,7 @@
   "coverSize": "medium",
   "sections": [
     {
-      "type": "text",
+      "type": "text-image",
       "text": "The morning train arrived without urgency, sliding into the station beneath a pale silver sky. Commuters stepped onto the platform carrying coffee, folded newspapers, and the quiet determination of people already thinking three hours ahead.\n\nA small blue notebook sat untouched on the corner of the desk. Its first page contained only a date, a crooked line, and a reminder to buy oranges. Everything after that was blank, waiting for an idea worth keeping.\n\nSome projects begin with a detailed plan. Others begin with a vague thought, an open browser tab, and the stubborn belief that the details will eventually organize themselves. Both approaches can work, although the second usually requires more snacks.\n\nBeyond the old wooden fence, wildflowers had spread across the field in uneven patches of yellow, violet, and white. Bees moved between them with impressive focus, ignoring the distant traffic and the wind bending the taller grass.\n\nThis paragraph is intentionally longer to test how text behaves across multiple lines, screen sizes, and content containers. It includes enough words to reveal spacing issues, awkward wrapping, narrow columns, inconsistent line heights, and unexpected overflow. A well-designed layout should remain comfortable to read without forcing the visitor to work too hard. Margins should feel generous, links should remain visible, and the text should adapt smoothly when viewed on a phone, tablet, laptop, or unusually wide monitor.",
       "image": "/images/uploads/51d4esi79-lacuf8941000ql80.jpg",
       "imagePosition": "right",
