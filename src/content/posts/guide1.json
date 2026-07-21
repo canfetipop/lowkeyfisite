@@ -1,0 +1,11 @@
+{
+  "title": "guide1",
+  "slug": "guide1",
+  "published": true,
+  "featured": false,
+  "date": "2026-07-20",
+  "category": "guides",
+  "excerpt": "first guide",
+  "image": "/images/uploads/screenshot-2026-06-16-144226.png",
+  "body": "abcd efg hijk"
+}
