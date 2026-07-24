@@ -1,30 +1,53 @@
 {
   "heading": "RESOURCES",
-  "intro": "Books, tools, and things I recommend.",
-  "categories": [
+  "sections": [
     {
-      "id": "books",
-      "title": "Books",
-      "description": "Finance, mindset, investing, and more.",
-      "icon": "/images/resources/books.png"
+      "_block": "heading",
+      "text": "Books"
     },
     {
-      "id": "tools",
-      "title": "Tools / Apps",
-      "description": "Apps, software, and tools that help me.",
-      "icon": "/images/resources/tools.png"
+      "_block": "paragraph",
+      "text": "A growing list of books about finance, mindset, investing, and more."
     },
     {
-      "id": "equipment",
-      "title": "Equipment",
-      "description": "Gear and setups I use and recommend.",
-      "icon": "/images/resources/equipment.png"
+      "_block": "image",
+      "image": "/images/resources/books.png"
     },
     {
-      "id": "other",
-      "title": "Other Recommendations",
-      "description": "Random things worth sharing.",
-      "icon": "/images/resources/other.png"
+      "_block": "heading",
+      "text": "Tools / Apps"
+    },
+    {
+      "_block": "paragraph",
+      "text": "Apps, software, and tools that help me build, learn, and stay organized."
+    },
+    {
+      "_block": "image",
+      "image": "/images/resources/tools.png"
+    },
+    {
+      "_block": "heading",
+      "text": "Equipment"
+    },
+    {
+      "_block": "paragraph",
+      "text": "Gear and setups I use and recommend."
+    },
+    {
+      "_block": "image",
+      "image": "/images/resources/equipment.png"
+    },
+    {
+      "_block": "heading",
+      "text": "Other Recommendations"
+    },
+    {
+      "_block": "paragraph",
+      "text": "Useful things worth sharing that do not fit anywhere else."
+    },
+    {
+      "_block": "image",
+      "image": "/images/resources/other.png"
     }
   ]
 }

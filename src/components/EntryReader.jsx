@@ -10,15 +10,18 @@ function TextBlock({ text }) {
 }
 
 function ContentSection({ section, index }) {
-  const type = section.type ?? "text";
+  const type = section._block ?? section.type ?? "paragraph";
 
   if (type === "image") {
     return (
-      <figure className={`article-image article-image--${section.size ?? "large"}`}>
-        <img src={assetUrl(section.image)} alt={section.imageAlt ?? ""} />
-        {section.caption && <figcaption>{section.caption}</figcaption>}
+      <figure className="article-image">
+        <img src={assetUrl(section.image)} alt="" />
       </figure>
     );
+  }
+
+  if (type === "heading") {
+    return <h2 className="article-heading">{section.text}</h2>;
   }
 
   if (type === "text-image") {
@@ -26,7 +29,7 @@ function ContentSection({ section, index }) {
       <section className={`article-split article-split--${section.imagePosition ?? "right"} article-split--${section.size ?? "medium"}`}>
         <div className="article-split__text"><TextBlock text={section.text} /></div>
         <figure className="article-split__media">
-          <img src={assetUrl(section.image)} alt={section.imageAlt ?? ""} />
+          <img src={assetUrl(section.image)} alt="" />
           {section.caption && <figcaption>{section.caption}</figcaption>}
         </figure>
       </section>
@@ -39,7 +42,10 @@ function ContentSection({ section, index }) {
 export default function EntryReader({ entry, categoryTitle, onBack, backLabel }) {
   const sections = entry.sections?.length
     ? entry.sections
-    : [{ type: entry.image ? "text-image" : "text", text: entry.body, image: entry.image, imageAlt: entry.imageAlt, imagePosition: entry.coverPosition ?? "right", size: entry.coverSize ?? "medium" }];
+    : [
+        { _block: "paragraph", text: entry.body },
+        ...(entry.image ? [{ _block: "image", image: entry.image }] : []),
+      ];
 
   return (
     <article className="post-reader">
@@ -56,7 +62,7 @@ export default function EntryReader({ entry, categoryTitle, onBack, backLabel })
       )}
 
       <div className="post-reader__body">
-        {sections.map((section, index) => <ContentSection section={section} index={index} key={`${section.type}-${index}`} />)}
+        {sections.map((section, index) => <ContentSection section={section} index={index} key={`${section._block ?? section.type}-${index}`} />)}
       </div>
     </article>
   );

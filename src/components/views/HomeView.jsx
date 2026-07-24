@@ -12,6 +12,7 @@ export default function HomeView({ onNavigate }) {
   const latestCategory = postCategories.categories.find(
     (category) => category.id === latestPost?.category,
   );
+  const latestImage = latestPost?.image || latestCategory?.icon;
 
   function openLatestPost() {
     if (latestPost) {
@@ -47,7 +48,7 @@ export default function HomeView({ onNavigate }) {
           </SectionHeading>
 
           {latestPost ? (
-            <div className="latest-post">
+            <div className={`latest-post${latestPost.image ? "" : " latest-post--fallback-image"}`}>
               <button
                 type="button"
                 onClick={openLatestPost}
@@ -56,8 +57,8 @@ export default function HomeView({ onNavigate }) {
               >
                 <img
                   className="latest-post__image"
-                  src={assetUrl(latestPost.image)}
-                  alt={latestPost.imageAlt}
+                  src={assetUrl(latestImage)}
+                  alt=""
                   draggable="false"
                 />
               </button>
@@ -107,6 +108,15 @@ export default function HomeView({ onNavigate }) {
                 key={statusItem.id}
                 className="current-status-item"
               >
+                <span className="current-status-item__icon" aria-hidden="true">
+                  <img
+                    className="status-pixel-icon"
+                    src={assetUrl(statusItem.icon)}
+                    alt=""
+                    draggable="false"
+                  />
+                </span>
+
                 <span className="current-status-item__text">
                   <strong>{statusItem.label}</strong>
                   <span>{statusItem.value}</span>

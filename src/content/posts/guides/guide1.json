@@ -7,5 +7,14 @@
   "category": "guides",
   "excerpt": "first guide",
   "image": "/images/uploads/screenshot-2026-06-16-144226.png",
-  "body": "abcd efg hijk"
+  "sections": [
+    {
+      "_block": "paragraph",
+      "text": "abcd efg hijk"
+    },
+    {
+      "_block": "image",
+      "image": "/images/uploads/screenshot-2026-06-16-144226.png"
+    }
+  ]
 }

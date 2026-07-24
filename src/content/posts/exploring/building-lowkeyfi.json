@@ -1,0 +1,24 @@
+{
+  "title": "Building LowKeyFI",
+  "slug": "building-lowkeyfi",
+  "published": true,
+  "featured": false,
+  "date": "2026-07-20",
+  "category": "exploring",
+  "excerpt": "Notes from designing and building this personal website.",
+  "image": "/images/hero-night.png",
+  "sections": [
+    {
+      "_block": "paragraph",
+      "text": "LowKeyFI is an ongoing project: part personal website, part digital notebook, and part experiment in building a calmer online space."
+    },
+    {
+      "_block": "image",
+      "image": "/images/hero-night.png"
+    },
+    {
+      "_block": "paragraph",
+      "text": "Use the admin editor to replace this starter text with your own project notes."
+    }
+  ]
+}
