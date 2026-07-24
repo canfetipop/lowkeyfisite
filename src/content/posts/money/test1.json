@@ -6,10 +6,15 @@
   "date": "2026-07-19",
   "category": "money",
   "excerpt": "asd",
+  "image": "/images/uploads/s70271163.jpg",
   "sections": [
     {
       "_block": "paragraph",
       "text": "asd"
+    },
+    {
+      "_block": "image",
+      "image": "/images/uploads/s70271163.jpg"
     }
   ]
 }
