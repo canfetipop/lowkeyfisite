@@ -1,6 +1,11 @@
 import SectionHeading from "../SectionHeading";
 import { assetUrl, resources } from "../../lib/content";
 
+function imageWidth(value) {
+  const requestedWidth = Number(value ?? 100);
+  return Math.min(100, Math.max(10, Number.isFinite(requestedWidth) ? requestedWidth : 100));
+}
+
 function ResourceSection({ section, index }) {
   const type = section._block ?? section.type;
 
@@ -10,7 +15,10 @@ function ResourceSection({ section, index }) {
 
   if (type === "image") {
     return (
-      <figure className="resource-content__image">
+      <figure
+        className="resource-content__image"
+        style={{ "--content-image-width": `${imageWidth(section.width)}%` }}
+      >
         <img src={assetUrl(section.image)} alt="" />
       </figure>
     );

@@ -10,20 +10,12 @@
       "text": "A growing list of books about finance, mindset, investing, and more."
     },
     {
-      "_block": "image",
-      "image": "/images/resources/books.png"
-    },
-    {
       "_block": "heading",
       "text": "Tools / Apps"
     },
     {
       "_block": "paragraph",
       "text": "Apps, software, and tools that help me build, learn, and stay organized."
-    },
-    {
-      "_block": "image",
-      "image": "/images/resources/tools.png"
     },
     {
       "_block": "heading",
@@ -34,20 +26,12 @@
       "text": "Gear and setups I use and recommend."
     },
     {
-      "_block": "image",
-      "image": "/images/resources/equipment.png"
-    },
-    {
       "_block": "heading",
       "text": "Other Recommendations"
     },
     {
       "_block": "paragraph",
       "text": "Useful things worth sharing that do not fit anywhere else."
-    },
-    {
-      "_block": "image",
-      "image": "/images/resources/other.png"
     }
   ]
 }

@@ -13,10 +13,6 @@
       "text": "This space can hold notes about learning, gaming, hobbies, skills, and anything else you're curious about."
     },
     {
-      "_block": "image",
-      "image": "/images/lab/exploring.png"
-    },
-    {
       "_block": "paragraph",
       "text": "Add more entries from the admin editor whenever you want to document a new exploration."
     }

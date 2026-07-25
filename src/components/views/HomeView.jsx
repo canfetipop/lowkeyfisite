@@ -96,35 +96,6 @@ export default function HomeView({ onNavigate }) {
             </p>
           )}
         </article>
-
-        <aside className="windows-panel current-status-panel">
-          <SectionHeading as="h2" size="medium">
-            CURRENT STATUS
-          </SectionHeading>
-
-          <div className="current-status-list">
-            {home.currentStatus.map((statusItem) => (
-              <div
-                key={statusItem.id}
-                className="current-status-item"
-              >
-                <span className="current-status-item__icon" aria-hidden="true">
-                  <img
-                    className="status-pixel-icon"
-                    src={assetUrl(statusItem.icon)}
-                    alt=""
-                    draggable="false"
-                  />
-                </span>
-
-                <span className="current-status-item__text">
-                  <strong>{statusItem.label}</strong>
-                  <span>{statusItem.value}</span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </aside>
       </section>
     </div>
   );

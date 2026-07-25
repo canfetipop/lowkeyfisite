@@ -13,10 +13,6 @@
       "text": "LowKeyFI is an ongoing project: part personal website, part digital notebook, and part experiment in building a calmer online space."
     },
     {
-      "_block": "image",
-      "image": "/images/hero-night.png"
-    },
-    {
       "_block": "paragraph",
       "text": "Use the admin editor to replace this starter text with your own project notes."
     }

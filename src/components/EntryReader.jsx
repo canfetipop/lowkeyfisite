@@ -9,12 +9,20 @@ function TextBlock({ text }) {
   return paragraphs(text).map((paragraph, index) => <p key={`${index}-${paragraph}`}>{paragraph}</p>);
 }
 
+function imageWidth(value) {
+  const requestedWidth = Number(value ?? 100);
+  return Math.min(100, Math.max(10, Number.isFinite(requestedWidth) ? requestedWidth : 100));
+}
+
 function ContentSection({ section, index }) {
   const type = section._block ?? section.type ?? "paragraph";
 
   if (type === "image") {
     return (
-      <figure className="article-image">
+      <figure
+        className="article-image"
+        style={{ "--content-image-width": `${imageWidth(section.width)}%` }}
+      >
         <img src={assetUrl(section.image)} alt="" />
       </figure>
     );
@@ -42,10 +50,7 @@ function ContentSection({ section, index }) {
 export default function EntryReader({ entry, categoryTitle, onBack, backLabel }) {
   const sections = entry.sections?.length
     ? entry.sections
-    : [
-        { _block: "paragraph", text: entry.body },
-        ...(entry.image ? [{ _block: "image", image: entry.image }] : []),
-      ];
+    : [{ _block: "paragraph", text: entry.body }];
 
   return (
     <article className="post-reader">

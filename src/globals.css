@@ -613,8 +613,7 @@ img {
 
 .home-dashboard {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(520px, 0.8fr);
-  gap: 33px;
+  grid-template-columns: minmax(0, 1fr);
 
   height: 488px;
   margin-top: 34px;
@@ -626,8 +625,8 @@ img {
 
 .latest-post {
   display: grid;
-  grid-template-columns: 340px minmax(0, 1fr);
-  gap: 38px;
+  grid-template-columns: 520px minmax(0, 1fr);
+  gap: 52px;
 
   margin-top: 24px;
 }
@@ -635,8 +634,8 @@ img {
 .latest-post__image-link {
   appearance: none;
   display: grid;
-  width: 340px;
-  height: 330px;
+  width: 520px;
+  height: 340px;
   overflow: hidden;
   place-items: center;
 
@@ -696,7 +695,7 @@ img {
 }
 
 .latest-post__description {
-  max-width: 100%;
+  max-width: 760px;
   margin: 24px 0 0;
 
   font-size: 23px;
@@ -727,73 +726,6 @@ img {
   font-weight: 400;
   line-height: 1;
   text-decoration: none;
-}
-
-.current-status-panel {
-  padding: 26px 37px 26px;
-}
-
-.current-status-list {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-
-  margin-top: 26px;
-}
-
-.current-status-item {
-  display: grid;
-  grid-template-columns: 62px minmax(0, 1fr);
-  gap: 24px;
-  align-items: center;
-
-  min-height: 88px;
-  padding: 7px 9px;
-
-  color: var(--windows-black);
-  background: transparent;
-  border: 0;
-  text-align: left;
-  text-decoration: none;
-  width: 100%;
-}
-
-.current-status-item__icon {
-  display: grid;
-  width: 58px;
-  height: 58px;
-  place-items: center;
-}
-
-.status-pixel-icon {
-  width: 52px;
-  height: 52px;
-  object-fit: contain;
-  image-rendering: pixelated;
-}
-
-.current-status-item__text {
-  display: flex;
-  gap: 22px;
-  align-items: baseline;
-
-  min-width: 0;
-
-  width: 100%;
-  font-size: 22px;
-  line-height: 1.55;
-  text-align: left;
-}
-
-.current-status-item__text strong {
-  flex: none;
-  color: var(--windows-blue);
-  font-weight: 800;
-}
-
-.current-status-item__text span {
-  min-width: 0;
-  font-weight: 500;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1081,8 +1013,12 @@ img {
 }
 
 .article-image {
-  width: 100%;
+  width: var(--content-image-width, 100%);
   margin: 34px 0 44px;
+}
+
+.article-image img {
+  width: 100%;
 }
 
 .article-heading {
@@ -1137,13 +1073,13 @@ img {
 }
 
 .resource-content__image {
-  width: 100%;
+  width: var(--content-image-width, 100%);
   margin: 18px 0 32px;
 }
 
 .resource-content__image img {
   display: block;
-  width: auto;
+  width: 100%;
   max-width: 100%;
   height: auto;
   object-fit: contain;

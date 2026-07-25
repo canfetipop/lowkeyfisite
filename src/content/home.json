@@ -2,25 +2,5 @@
   "heading": "HOME",
   "description": "notes on money, projects,\ntravel, and becoming.",
   "heroImage": "/images/hero-night.png",
-  "heroImageAlt": "Pixel-art scene of a person working beside a window overlooking a city at night",
-  "currentStatus": [
-    {
-      "id": "exploring",
-      "label": "Exploring:",
-      "value": "Learning + hobbies",
-      "icon": "/images/lab/exploring.png"
-    },
-    {
-      "id": "planning",
-      "label": "Planning:",
-      "value": "Bali trip",
-      "icon": "/images/posts/travel.png"
-    },
-    {
-      "id": "status",
-      "label": "Status:",
-      "value": "Student",
-      "icon": "/images/sidebar/about.png"
-    }
-  ]
+  "heroImageAlt": "Pixel-art scene of a person working beside a window overlooking a city at night"
 }
