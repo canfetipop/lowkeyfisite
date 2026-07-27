@@ -114,7 +114,12 @@ content:
                 label: Paragraph
                 type: object
                 fields:
-                  - { name: text, label: Text, type: text, required: true, description: "Blank lines create separate paragraphs." }
+                  - name: text
+                    label: Text
+                    type: rich-text
+                    required: true
+                    options: { format: markdown, media: false }
+                    description: "Use the toolbar for links, bold, italic, lists, and more. To link another post, use /posts/category/post-slug."
               - name: image
                 label: Picture
                 type: object
@@ -198,7 +203,12 @@ content:
                 label: Paragraph
                 type: object
                 fields:
-                  - { name: text, label: Text, type: text, required: true, description: "Blank lines create separate paragraphs." }
+                  - name: text
+                    label: Text
+                    type: rich-text
+                    required: true
+                    options: { format: markdown, media: false }
+                    description: "Use the toolbar for links, bold, italic, lists, and more. To link another post, use /posts/category/post-slug."
               - name: image
                 label: Picture
                 type: object

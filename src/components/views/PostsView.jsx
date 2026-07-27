@@ -27,7 +27,7 @@ export default function PostsView({ initialCategoryId, initialPostSlug, onNaviga
         <div className="post-entry-list post-entry-list--category">
           {categoryPosts.length ? categoryPosts.map((post) => (
             <button
-              className="post-entry-card"
+              className={`post-entry-card${post.image ? "" : " post-entry-card--no-image"}`}
               key={post.slug}
               type="button"
               onClick={() => onNavigate("posts", { categoryId: post.category, postSlug: post.slug })}

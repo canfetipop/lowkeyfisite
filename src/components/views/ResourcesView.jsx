@@ -1,4 +1,5 @@
 import SectionHeading from "../SectionHeading";
+import RichTextContent from "../RichTextContent";
 import { assetUrl, resources } from "../../lib/content";
 
 function imageWidth(value) {
@@ -26,9 +27,7 @@ function ResourceSection({ section, index }) {
 
   return (
     <div className="resource-content__paragraph">
-      {(section.text ?? "").split(/\n\s*\n/).filter(Boolean).map((paragraph) => (
-        <p key={`${index}-${paragraph}`}>{paragraph}</p>
-      ))}
+      <RichTextContent text={section.text} />
     </div>
   );
 }

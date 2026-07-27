@@ -1,13 +1,6 @@
 import SectionHeading from "./SectionHeading";
+import RichTextContent from "./RichTextContent";
 import { assetUrl, formatPostDate } from "../lib/content";
-
-function paragraphs(text = "") {
-  return text.split(/\n\s*\n/).filter(Boolean);
-}
-
-function TextBlock({ text }) {
-  return paragraphs(text).map((paragraph, index) => <p key={`${index}-${paragraph}`}>{paragraph}</p>);
-}
 
 function imageWidth(value) {
   const requestedWidth = Number(value ?? 100);
@@ -35,7 +28,7 @@ function ContentSection({ section, index }) {
   if (type === "text-image") {
     return (
       <section className={`article-split article-split--${section.imagePosition ?? "right"} article-split--${section.size ?? "medium"}`}>
-        <div className="article-split__text"><TextBlock text={section.text} /></div>
+        <div className="article-split__text"><RichTextContent text={section.text} /></div>
         <figure className="article-split__media">
           <img src={assetUrl(section.image)} alt="" />
           {section.caption && <figcaption>{section.caption}</figcaption>}
@@ -44,7 +37,7 @@ function ContentSection({ section, index }) {
     );
   }
 
-  return <section className="article-text" key={index}><TextBlock text={section.text} /></section>;
+  return <section className="article-text" key={index}><RichTextContent text={section.text} /></section>;
 }
 
 export default function EntryReader({ entry, categoryTitle, onBack, backLabel }) {
