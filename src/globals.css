@@ -43,6 +43,7 @@
 
 *::-webkit-scrollbar-thumb {
   min-height: 46px;
+  min-width: 46px;
   background: #d4d4d4;
   border: 3px solid;
   border-color: #ffffff #4b4b4b #4b4b4b #ffffff;
@@ -51,14 +52,22 @@
     inset -1px -1px 0 #8a8a8a;
 }
 
-*::-webkit-scrollbar-button:vertical {
+*::-webkit-scrollbar-button:vertical,
+*::-webkit-scrollbar-button:horizontal {
   display: block;
-  height: 28px;
   background-color: #d4d4d4;
   background-position: center;
   background-repeat: no-repeat;
   border: 3px solid;
   border-color: #ffffff #4b4b4b #4b4b4b #ffffff;
+}
+
+*::-webkit-scrollbar-button:vertical {
+  height: 28px;
+}
+
+*::-webkit-scrollbar-button:horizontal {
+  width: 28px;
 }
 
 *::-webkit-scrollbar-button:vertical:decrement {
@@ -158,6 +167,25 @@ img {
   box-shadow:
     0 0 0 2px #7c7c7c,
     12px 14px 35px rgba(0, 0, 0, 0.55);
+}
+
+*::-webkit-scrollbar-button:horizontal:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='12'%3E%3Cpath d='M7 1v10L1 6z' fill='%23111'/%3E%3C/svg%3E");
+}
+
+*::-webkit-scrollbar-button:horizontal:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='12'%3E%3Cpath d='M1 1v10l6-5z' fill='%23111'/%3E%3C/svg%3E");
+}
+
+*::-webkit-scrollbar-button:vertical:active,
+*::-webkit-scrollbar-button:horizontal:active {
+  border-color: #4b4b4b #ffffff #ffffff #4b4b4b;
+}
+
+*::-webkit-scrollbar-corner {
+  background: #d4d4d4;
+  border: 2px solid;
+  border-color: #7f7f7f #ffffff #ffffff #7f7f7f;
 }
 
 .desktop-window--minimized {
@@ -313,11 +341,6 @@ img {
   background: #111111;
 }
 
-.window-control-glyph--maximize {
-  border: 4px solid #111111;
-  border-top-width: 6px;
-}
-
 .window-control-glyph--restore::before,
 .window-control-glyph--restore::after {
   position: absolute;
@@ -330,13 +353,24 @@ img {
 }
 
 .window-control-glyph--restore::before {
-  top: 1px;
+  top: 0;
   right: 0;
 }
 
 .window-control-glyph--restore::after {
   bottom: 0;
   left: 0;
+}
+
+.window-control-button:hover .window-control-glyph--restore::before,
+.window-control-button:hover .window-control-glyph--restore::after {
+  border-color: #153bc4;
+}
+
+.window-control-button:hover .window-control-glyph--minimize::after,
+.window-control-button:hover .window-control-glyph--close::before,
+.window-control-button:hover .window-control-glyph--close::after {
+  background: #153bc4;
 }
 
 .window-control-glyph--close::before,

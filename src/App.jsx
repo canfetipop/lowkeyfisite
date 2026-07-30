@@ -78,6 +78,10 @@ export default function LowkeyfiPage() {
   const [windowScale, setWindowScale] = useState(1);
   const [scaleIsReady, setScaleIsReady] = useState(false);
   const [isCompactLayout, setIsCompactLayout] = useState(false);
+  const [designSize, setDesignSize] = useState({
+    width: DESIGN_WIDTH,
+    height: DESIGN_HEIGHT,
+  });
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(Boolean(document.fullscreenElement));
   const [isClosed, setIsClosed] = useState(false);
@@ -94,13 +98,21 @@ export default function LowkeyfiPage() {
         : nextCompactLayout
           ? COMPACT_DESIGN_WIDTH
           : DESIGN_WIDTH;
-      const designHeight = isMinimized ? MINIMIZED_HEIGHT : DESIGN_HEIGHT;
+      const designHeight = isMinimized
+        ? MINIMIZED_HEIGHT
+        : nextCompactLayout
+          ? Math.max(
+            DESIGN_HEIGHT,
+            COMPACT_DESIGN_WIDTH * (window.innerHeight / window.innerWidth),
+          )
+          : DESIGN_HEIGHT;
       const nextScale = Math.min(
         window.innerWidth / designWidth,
         window.innerHeight / designHeight,
       );
 
       setIsCompactLayout(nextCompactLayout);
+      setDesignSize({ width: designWidth, height: designHeight });
       setWindowScale(Math.max(Math.min(nextScale, 1), 0.1));
       setScaleIsReady(true);
     }
@@ -123,15 +135,9 @@ export default function LowkeyfiPage() {
 
   const ActiveView = VIEW_COMPONENTS[route.view] ?? HomeView;
   const frameSize = useMemo(() => ({
-    width: (
-      isMinimized
-        ? MINIMIZED_WIDTH
-        : isCompactLayout
-          ? COMPACT_DESIGN_WIDTH
-          : DESIGN_WIDTH
-    ) * windowScale,
-    height: (isMinimized ? MINIMIZED_HEIGHT : DESIGN_HEIGHT) * windowScale,
-  }), [isCompactLayout, isMinimized, windowScale]);
+    width: designSize.width * windowScale,
+    height: designSize.height * windowScale,
+  }), [designSize, windowScale]);
 
   function handleViewChange(viewId, nextContext = {}) {
     const nextPath = routePath(viewId, nextContext);
@@ -166,7 +172,8 @@ export default function LowkeyfiPage() {
     <main
       className="site-stage"
       style={{
-        "--design-width": `${isCompactLayout ? COMPACT_DESIGN_WIDTH : DESIGN_WIDTH}px`,
+        "--design-width": `${designSize.width}px`,
+        "--design-height": `${designSize.height}px`,
         "--windows-blue": site.theme.accentColor,
         "--windows-blue-light": site.theme.accentColorLight,
         "--windows-gray": site.theme.windowColor,
