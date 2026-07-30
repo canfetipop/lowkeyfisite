@@ -35,7 +35,7 @@ export default function WindowChrome({
           onClick={onMaximize}
         >
           <span
-            className="window-control-glyph window-control-glyph--restore"
+            className={`window-control-glyph window-control-glyph--restore${isFullscreen ? " window-control-glyph--is-active" : ""}`}
             aria-hidden="true"
           />
         </button>

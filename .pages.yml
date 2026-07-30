@@ -103,7 +103,6 @@ content:
             type: block
             required: true
             list: { min: 1, collapsible: { collapsed: true, summary: "{text}" } }
-            description: "Format text with the toolbar, add links or pictures, and drag blocks to reorder them."
             blocks:
               - name: heading
                 label: Blue heading
@@ -190,7 +189,6 @@ content:
             type: block
             required: true
             list: { min: 1, collapsible: { collapsed: true, summary: "{text}" } }
-            description: "Format text with the toolbar, add links or pictures, and drag blocks into reading order. Other posts use /posts/category/post-slug."
             blocks:
               - name: heading
                 label: Blue heading

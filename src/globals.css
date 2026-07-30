@@ -30,22 +30,21 @@
 }
 
 *::-webkit-scrollbar {
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
 }
 
 *::-webkit-scrollbar-track {
   background:
-    repeating-conic-gradient(#d4d4d4 0 25%, #eeeeee 0 50%) 0 / 4px 4px;
-  border: 2px solid;
-  border-color: #7f7f7f #ffffff #ffffff #7f7f7f;
+    repeating-conic-gradient(#d4d4d4 0 25%, #eeeeee 0 50%) 0 / 3px 3px;
+  border: 1px solid #7f7f7f;
 }
 
 *::-webkit-scrollbar-thumb {
-  min-height: 46px;
-  min-width: 46px;
+  min-height: 38px;
+  min-width: 38px;
   background: #d4d4d4;
-  border: 3px solid;
+  border: 2px solid;
   border-color: #ffffff #4b4b4b #4b4b4b #ffffff;
   box-shadow:
     inset 1px 1px 0 #eeeeee,
@@ -58,16 +57,16 @@
   background-color: #d4d4d4;
   background-position: center;
   background-repeat: no-repeat;
-  border: 3px solid;
+  border: 2px solid;
   border-color: #ffffff #4b4b4b #4b4b4b #ffffff;
 }
 
 *::-webkit-scrollbar-button:vertical {
-  height: 28px;
+  height: 22px;
 }
 
 *::-webkit-scrollbar-button:horizontal {
-  width: 28px;
+  width: 22px;
 }
 
 *::-webkit-scrollbar-button:vertical:decrement {
@@ -363,7 +362,9 @@ img {
 }
 
 .window-control-button:hover .window-control-glyph--restore::before,
-.window-control-button:hover .window-control-glyph--restore::after {
+.window-control-button:hover .window-control-glyph--restore::after,
+.window-control-glyph--restore.window-control-glyph--is-active::before,
+.window-control-glyph--restore.window-control-glyph--is-active::after {
   border-color: #153bc4;
 }
 
