@@ -12,6 +12,9 @@ import { posts, site } from "./lib/content";
 
 const DESIGN_WIDTH = 1920;
 const DESIGN_HEIGHT = 1080;
+const COMPACT_DESIGN_WIDTH = 1440;
+const COMPACT_ASPECT_RATIO = 1.35;
+const COMPACT_MAX_WIDTH = 1280;
 const MINIMIZED_WIDTH = 720;
 const MINIMIZED_HEIGHT = 74;
 
@@ -74,19 +77,30 @@ export default function LowkeyfiPage() {
   const [route, setRoute] = useState(() => parseRoute(window.location.pathname));
   const [windowScale, setWindowScale] = useState(1);
   const [scaleIsReady, setScaleIsReady] = useState(false);
+  const [isCompactLayout, setIsCompactLayout] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(Boolean(document.fullscreenElement));
   const [isClosed, setIsClosed] = useState(false);
 
   useEffect(() => {
     function updateWindowScale() {
-      const designWidth = isMinimized ? MINIMIZED_WIDTH : DESIGN_WIDTH;
+      const nextCompactLayout = !isMinimized
+        && (
+          window.innerWidth <= COMPACT_MAX_WIDTH
+          || window.innerWidth / window.innerHeight < COMPACT_ASPECT_RATIO
+        );
+      const designWidth = isMinimized
+        ? MINIMIZED_WIDTH
+        : nextCompactLayout
+          ? COMPACT_DESIGN_WIDTH
+          : DESIGN_WIDTH;
       const designHeight = isMinimized ? MINIMIZED_HEIGHT : DESIGN_HEIGHT;
       const nextScale = Math.min(
         window.innerWidth / designWidth,
         window.innerHeight / designHeight,
       );
 
+      setIsCompactLayout(nextCompactLayout);
       setWindowScale(Math.max(Math.min(nextScale, 1), 0.1));
       setScaleIsReady(true);
     }
@@ -109,9 +123,15 @@ export default function LowkeyfiPage() {
 
   const ActiveView = VIEW_COMPONENTS[route.view] ?? HomeView;
   const frameSize = useMemo(() => ({
-    width: (isMinimized ? MINIMIZED_WIDTH : DESIGN_WIDTH) * windowScale,
+    width: (
+      isMinimized
+        ? MINIMIZED_WIDTH
+        : isCompactLayout
+          ? COMPACT_DESIGN_WIDTH
+          : DESIGN_WIDTH
+    ) * windowScale,
     height: (isMinimized ? MINIMIZED_HEIGHT : DESIGN_HEIGHT) * windowScale,
-  }), [isMinimized, windowScale]);
+  }), [isCompactLayout, isMinimized, windowScale]);
 
   function handleViewChange(viewId, nextContext = {}) {
     const nextPath = routePath(viewId, nextContext);
@@ -146,6 +166,7 @@ export default function LowkeyfiPage() {
     <main
       className="site-stage"
       style={{
+        "--design-width": `${isCompactLayout ? COMPACT_DESIGN_WIDTH : DESIGN_WIDTH}px`,
         "--windows-blue": site.theme.accentColor,
         "--windows-blue-light": site.theme.accentColorLight,
         "--windows-gray": site.theme.windowColor,
@@ -171,7 +192,7 @@ export default function LowkeyfiPage() {
           }}
         >
           <section
-            className={`desktop-window${isMinimized ? " desktop-window--minimized" : ""}`}
+            className={`desktop-window${isMinimized ? " desktop-window--minimized" : ""}${isCompactLayout ? " desktop-window--compact" : ""}`}
             aria-label="Lowkeyfi personal website"
             style={{ transform: `scale(${windowScale})` }}
           >

@@ -103,7 +103,7 @@ content:
             type: block
             required: true
             list: { min: 1, collapsible: { collapsed: true, summary: "{text}" } }
-            description: "Add and reorder blue headings, paragraphs, and pictures."
+            description: "Format text with the toolbar, add links or pictures, and drag blocks to reorder them."
             blocks:
               - name: heading
                 label: Blue heading
@@ -119,7 +119,6 @@ content:
                     type: rich-text
                     required: true
                     options: { format: markdown, media: false }
-                    description: "Use the toolbar for links, bold, italic, lists, and more. To link another post, use /posts/category/post-slug."
               - name: image
                 label: Picture
                 type: object
@@ -180,7 +179,6 @@ content:
             label: URL-friendly ID
             type: string
             required: true
-            description: "Lowercase letters, numbers, and hyphens only."
             pattern: { regex: "^[a-z0-9-]+$", message: "Use lowercase letters, numbers, and hyphens only." }
           - { name: published, label: Published, type: boolean }
           - { name: featured, label: Feature on homepage, type: boolean }
@@ -192,7 +190,7 @@ content:
             type: block
             required: true
             list: { min: 1, collapsible: { collapsed: true, summary: "{text}" } }
-            description: "Add paragraphs and pictures in the exact order they should appear."
+            description: "Format text with the toolbar, add links or pictures, and drag blocks into reading order. Other posts use /posts/category/post-slug."
             blocks:
               - name: heading
                 label: Blue heading
@@ -208,7 +206,6 @@ content:
                     type: rich-text
                     required: true
                     options: { format: markdown, media: false }
-                    description: "Use the toolbar for links, bold, italic, lists, and more. To link another post, use /posts/category/post-slug."
               - name: image
                 label: Picture
                 type: object

@@ -166,6 +166,53 @@ img {
   height: 74px;
 }
 
+.desktop-window--compact {
+  --sidebar-width: 300px;
+}
+
+.desktop-window--compact .sidebar {
+  padding-right: 22px;
+  padding-left: 22px;
+}
+
+.desktop-window--compact .home-view,
+.desktop-window--compact .posts-view,
+.desktop-window--compact .resources-view,
+.desktop-window--compact .about-view,
+.desktop-window--compact .contact-view,
+.desktop-window--compact .post-reader {
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
+.desktop-window--compact .home-hero {
+  grid-template-columns: 430px minmax(0, 1fr);
+  gap: 50px;
+}
+
+.desktop-window--compact .home-hero__introduction {
+  width: 430px;
+}
+
+.desktop-window--compact .latest-post {
+  grid-template-columns: 430px minmax(0, 1fr);
+  gap: 40px;
+}
+
+.desktop-window--compact .latest-post__image-link {
+  width: 430px;
+}
+
+.desktop-window--compact .contact-view__layout {
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: 42px;
+}
+
+.desktop-window--compact .article-split {
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 36px;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Window chrome                                                              */
 /* -------------------------------------------------------------------------- */
