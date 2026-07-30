@@ -346,25 +346,31 @@ img {
   width: 20px;
   height: 17px;
   content: "";
-  background: #c6c6c6;
+  background: #d4d4d4;
   border: 3px solid #111111;
   border-top-width: 5px;
+  box-shadow: inset 1px 1px 0 #ffffff;
+}
+
+.window-control-glyph--restore {
+  width: 30px;
+  height: 28px;
 }
 
 .window-control-glyph--restore::before {
   top: 0;
   right: 0;
+  z-index: 0;
 }
 
 .window-control-glyph--restore::after {
   bottom: 0;
   left: 0;
+  z-index: 1;
 }
 
 .window-control-button:hover .window-control-glyph--restore::before,
-.window-control-button:hover .window-control-glyph--restore::after,
-.window-control-glyph--restore.window-control-glyph--is-active::before,
-.window-control-glyph--restore.window-control-glyph--is-active::after {
+.window-control-button:hover .window-control-glyph--restore::after {
   border-color: #153bc4;
 }
 
