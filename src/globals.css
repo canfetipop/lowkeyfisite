@@ -340,21 +340,29 @@ img {
   background: #111111;
 }
 
-.window-control-glyph--restore::before,
-.window-control-glyph--restore::after {
-  position: absolute;
-  width: 20px;
-  height: 17px;
-  content: "";
+.window-control-glyph--maximize {
+  width: 25px;
+  height: 23px;
   background: #d4d4d4;
-  border: 3px solid #111111;
-  border-top-width: 5px;
+  border: 4px solid #111111;
+  border-top-width: 6px;
   box-shadow: inset 1px 1px 0 #ffffff;
 }
 
+.window-control-glyph--restore::before,
+.window-control-glyph--restore::after {
+  position: absolute;
+  box-sizing: border-box;
+  width: 23px;
+  height: 19px;
+  content: "";
+  background: #d4d4d4;
+  border: 3px solid #111111;
+}
+
 .window-control-glyph--restore {
-  width: 30px;
-  height: 28px;
+  width: 31px;
+  height: 27px;
 }
 
 .window-control-glyph--restore::before {
@@ -367,6 +375,10 @@ img {
   bottom: 0;
   left: 0;
   z-index: 1;
+}
+
+.window-control-button:hover .window-control-glyph--maximize {
+  border-color: #153bc4;
 }
 
 .window-control-button:hover .window-control-glyph--restore::before,
@@ -447,11 +459,41 @@ img {
 
 .closed-screen__dialog button {
   padding: 13px 24px;
+  color: #111111;
+  cursor: pointer;
   background: #dedede;
   border-top: 3px solid #fff;
   border-left: 3px solid #fff;
   border-right: 3px solid #333;
   border-bottom: 3px solid #333;
+  box-shadow: inset 1px 1px 0 #f5f5f5;
+}
+
+.closed-screen__dialog button:hover {
+  color: var(--windows-blue);
+  background: #eeeeee;
+  box-shadow:
+    inset 1px 1px 0 #ffffff,
+    0 0 0 2px var(--windows-blue);
+}
+
+.closed-screen__dialog button:active {
+  padding-top: 15px;
+  padding-right: 22px;
+  padding-bottom: 11px;
+  padding-left: 26px;
+  color: #111111;
+  background: #c6c6c6;
+  border-top-color: #333333;
+  border-left-color: #333333;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow: inset 2px 2px 0 #777777;
+}
+
+.closed-screen__dialog button:focus-visible {
+  outline: 2px dotted currentColor;
+  outline-offset: -7px;
 }
 
 .view-area {
