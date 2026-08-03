@@ -98,32 +98,11 @@ content:
         format: json
         fields:
           - { name: heading, label: Page title, type: string, required: true, readonly: true }
-          - name: sections
+          - name: body
             label: Resource content
-            type: block
+            type: rich-text
             required: true
-            list: { min: 1, collapsible: { collapsed: true, summary: "{text}" } }
-            blocks:
-              - name: heading
-                label: Blue heading
-                type: object
-                fields:
-                  - { name: text, label: Heading, type: string, required: true }
-              - name: paragraph
-                label: Paragraph
-                type: object
-                fields:
-                  - name: text
-                    label: Text
-                    type: rich-text
-                    required: true
-                    options: { format: markdown, media: false, switcher: false }
-              - name: image
-                label: Picture
-                type: object
-                fields:
-                  - { name: image, label: Picture, type: image, required: true }
-                  - { name: width, label: Image width (%), type: number, default: 100, required: true, options: { min: 10, max: 100, step: 5 } }
+            options: { format: markdown, switcher: false }
 
       - name: contact
         label: Contact
@@ -184,32 +163,11 @@ content:
           - { name: date, label: Publish date, type: date, required: true }
           - { name: excerpt, label: Subtitle, type: text, required: true }
           - { name: image, label: Homepage/card picture, type: image, description: "Optional. The full picture is shown without cropping." }
-          - name: sections
+          - name: body
             label: Post content
-            type: block
+            type: rich-text
             required: true
-            list: { min: 1, collapsible: { collapsed: true, summary: "{text}" } }
-            blocks:
-              - name: heading
-                label: Blue heading
-                type: object
-                fields:
-                  - { name: text, label: Heading, type: string, required: true }
-              - name: paragraph
-                label: Paragraph
-                type: object
-                fields:
-                  - name: text
-                    label: Text
-                    type: rich-text
-                    required: true
-                    options: { format: markdown, media: false, switcher: false }
-              - name: image
-                label: Picture
-                type: object
-                fields:
-                  - { name: image, label: Picture, type: image, required: true }
-                  - { name: width, label: Image width (%), type: number, default: 100, required: true, options: { min: 10, max: 100, step: 5 } }
+            options: { format: markdown, switcher: false }
 
       - name: exploringPosts
         label: Exploring posts

@@ -1,37 +1,4 @@
 {
   "heading": "RESOURCES",
-  "sections": [
-    {
-      "_block": "heading",
-      "text": "Books"
-    },
-    {
-      "_block": "paragraph",
-      "text": "A growing list of books about finance, mindset, investing, and more."
-    },
-    {
-      "_block": "heading",
-      "text": "Tools / Apps"
-    },
-    {
-      "_block": "paragraph",
-      "text": "Apps, software, and tools that help me build, learn, and stay organized."
-    },
-    {
-      "_block": "heading",
-      "text": "Equipment"
-    },
-    {
-      "_block": "paragraph",
-      "text": "Gear and setups I use and recommend."
-    },
-    {
-      "_block": "heading",
-      "text": "Other Recommendations"
-    },
-    {
-      "_block": "paragraph",
-      "text": "Useful things worth sharing that do not fit anywhere else."
-    }
-  ]
+  "body": "## Books\n\nA growing list of books about finance, mindset, investing, and more.\n\n## Tools / Apps\n\nApps, software, and tools that help me build, learn, and stay organized.\n\n## Equipment\n\nGear and setups I use and recommend.\n\n## Other Recommendations\n\nUseful things worth sharing that do not fit anywhere else."
 }

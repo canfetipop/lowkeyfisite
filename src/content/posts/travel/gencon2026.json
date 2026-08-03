@@ -6,22 +6,5 @@
   "date": "2026-08-03",
   "excerpt": "largest board game convention in America.",
   "image": "/images/uploads/image-2.png",
-  "sections": [
-    {
-      "_block": "paragraph",
-      "text": "Last weekend, I had a chance to visit GenCon 2026 with my siblings and their family friends. It was the first-ever convention I've been to, and I loved the short time I had there."
-    },
-    {
-      "_block": "heading",
-      "text": "Delta Flight (SJC -> ATL, ATL -> IND)"
-    },
-    {
-      "_block": "paragraph",
-      "text": "For this particular trip, I had flown a flight with Delta on a Thursday night to arrive on Friday morning. \n\nIt was my first with Delta, and previously I've flown United and AA. This Delta flight pampered me, as I got free in-flight wifi and their in-flight entertainment tablet that has **limited** youtube, crunchyroll, music, and movies. \n\nIn addition, they also provide free drinks and a snack after departure (if destination > 350 miles). \n\nThe three-hour time difference between California and Indiana made the overnight flight somewhat unbearable, as I had only gotten 2 hours of sleep across 36 hours. My first flight was from approximately 10pm to 2am PT, but it was around 5pm when I landed in Georgia. I then boarded a 7am connecting flight and arrived in Indiana at around 9am."
-    },
-    {
-      "_block": "heading",
-      "text": "Total Cost"
-    }
-  ]
+  "body": "Last weekend, I had a chance to visit GenCon 2026 with my siblings and their family friends. It was the first-ever convention I've been to, and I loved the short time I had there.\n\n## Delta Flight (SJC -> ATL, ATL -> IND)\n\nFor this particular trip, I had flown a flight with Delta on a Thursday night to arrive on Friday morning. \n\nIt was my first with Delta, and previously I've flown United and AA. This Delta flight pampered me, as I got free in-flight wifi and their in-flight entertainment tablet that has **limited** youtube, crunchyroll, music, and movies. \n\nIn addition, they also provide free drinks and a snack after departure (if destination > 350 miles). \n\nThe three-hour time difference between California and Indiana made the overnight flight somewhat unbearable, as I had only gotten 2 hours of sleep across 36 hours. My first flight was from approximately 10pm to 2am PT, but it was around 5pm when I landed in Georgia. I then boarded a 7am connecting flight and arrived in Indiana at around 9am.\n\n## Total Cost"
 }

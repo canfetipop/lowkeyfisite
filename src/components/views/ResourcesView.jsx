@@ -33,17 +33,23 @@ function ResourceSection({ section, index }) {
 }
 
 export default function ResourcesView() {
+  const hasResourceBody = typeof resources.body === "string" && resources.body.trim().length > 0;
+
   return (
     <div className="resources-view resources-view--scrollable">
       <SectionHeading as="h1" size="large" showRule>{resources.heading}</SectionHeading>
       <div className="resource-content">
-        {(resources.sections ?? []).map((section, index) => (
-          <ResourceSection
-            key={`${section._block ?? section.type}-${index}`}
-            section={section}
-            index={index}
-          />
-        ))}
+        {hasResourceBody ? (
+          <RichTextContent text={resources.body} />
+        ) : (
+          (resources.sections ?? []).map((section, index) => (
+            <ResourceSection
+              key={`${section._block ?? section.type}-${index}`}
+              section={section}
+              index={index}
+            />
+          ))
+        )}
       </div>
     </div>
   );

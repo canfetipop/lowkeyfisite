@@ -41,9 +41,8 @@ function ContentSection({ section, index }) {
 }
 
 export default function EntryReader({ entry, categoryTitle, onBack, backLabel }) {
-  const sections = entry.sections?.length
-    ? entry.sections
-    : [{ _block: "paragraph", text: entry.body }];
+  const hasArticleBody = typeof entry.body === "string" && entry.body.trim().length > 0;
+  const sections = entry.sections ?? [];
 
   return (
     <article className="post-reader">
@@ -60,7 +59,11 @@ export default function EntryReader({ entry, categoryTitle, onBack, backLabel })
       )}
 
       <div className="post-reader__body">
-        {sections.map((section, index) => <ContentSection section={section} index={index} key={`${section._block ?? section.type}-${index}`} />)}
+        {hasArticleBody ? (
+          <section className="article-text"><RichTextContent text={entry.body} /></section>
+        ) : (
+          sections.map((section, index) => <ContentSection section={section} index={index} key={`${section._block ?? section.type}-${index}`} />)
+        )}
       </div>
     </article>
   );
