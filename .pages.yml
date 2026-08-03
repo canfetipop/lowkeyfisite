@@ -117,7 +117,7 @@ content:
                     label: Text
                     type: rich-text
                     required: true
-                    options: { format: markdown, media: false }
+                    options: { format: markdown, media: false, switcher: false }
               - name: image
                 label: Picture
                 type: object
@@ -203,7 +203,7 @@ content:
                     label: Text
                     type: rich-text
                     required: true
-                    options: { format: markdown, media: false }
+                    options: { format: markdown, media: false, switcher: false }
               - name: image
                 label: Picture
                 type: object

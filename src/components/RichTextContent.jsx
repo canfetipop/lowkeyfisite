@@ -55,6 +55,13 @@ export default function RichTextContent({ text = "" }) {
               </a>
             );
           },
+          table({ node: _node, children, ...props }) {
+            return (
+              <div className="rich-text-table" role="region" aria-label="Scrollable table" tabIndex="0">
+                <table {...props}>{children}</table>
+              </div>
+            );
+          },
         }}
       >
         {text}
