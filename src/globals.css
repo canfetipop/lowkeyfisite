@@ -1,16 +1,8 @@
 @font-face {
-  font-family: "MSW98UI";
-  src: url("/fonts/MSW98UI-Regular.otf") format("opentype");
+  font-family: "W95FA";
+  src: url("/fonts/W95FA.woff2") format("woff2");
   font-style: normal;
-  font-weight: 100 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "MSW98UI";
-  src: url("/fonts/MSW98UI-Bold.otf") format("opentype");
-  font-style: normal;
-  font-weight: 700 900;
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -124,7 +116,7 @@ input,
 textarea,
 select {
   font-family:
-    "MSW98UI",
+    "W95FA",
     "MS Sans Serif",
     "Microsoft Sans Serif",
     Tahoma,
@@ -136,14 +128,14 @@ body {
   color: var(--windows-black);
   background: var(--stage-background);
   font-size: 24px;
-  font-synthesis: none;
+  font-synthesis: weight;
   image-rendering: auto;
 }
 
-/* The bundled pixel font is bold-only, so body copy uses a true regular face. */
+/* W95FA is the typeface for all body copy as well as the surrounding UI. */
 p {
   font-family:
-    "MSW98UI",
+    "W95FA",
     "MS Sans Serif",
     "Microsoft Sans Serif",
     Tahoma,
@@ -1004,7 +996,7 @@ img {
 
 .post-category-card__arrow {
   justify-self: end;
-  font-family: Arial, sans-serif;
+  font-family: "W95FA", sans-serif;
   font-size: 56px;
   font-weight: 400;
   line-height: 1;
@@ -1178,7 +1170,7 @@ img {
 
 .rich-text-content strong {
   font-family:
-    "MSW98UI",
+    "W95FA",
     "MS Sans Serif",
     "Microsoft Sans Serif",
     Tahoma,
@@ -1221,7 +1213,7 @@ img {
 .rich-text-content code {
   padding: 1px 4px;
   background: rgba(0, 0, 0, 0.08);
-  font-family: Consolas, monospace;
+  font-family: "W95FA", sans-serif;
   font-size: 0.9em;
 }
 
