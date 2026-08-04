@@ -34,7 +34,8 @@
   height: 30px;
 }
 
-*::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track-piece {
   background:
     repeating-conic-gradient(#ffffff 0 25%, #c7c7c7 0 50%) 0 0 / 4px 4px;
   border-right: 2px solid #ffffff;
@@ -83,6 +84,17 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' shape-rendering='crispEdges'%3E%3Cpath d='M0 1h14L7 9z' fill='%23000'/%3E%3C/svg%3E");
 }
 
+/* Keep one arrow at each end, like the Windows 98 single-button scrollbar. */
+*::-webkit-scrollbar-button:vertical:start:increment,
+*::-webkit-scrollbar-button:vertical:end:decrement,
+*::-webkit-scrollbar-button:horizontal:start:increment,
+*::-webkit-scrollbar-button:horizontal:end:decrement {
+  display: none;
+  width: 0;
+  height: 0;
+  border: 0;
+}
+
 html,
 body {
   width: 100%;
@@ -117,6 +129,16 @@ body {
   font-size: 24px;
   font-synthesis: none;
   image-rendering: auto;
+}
+
+/* The bundled pixel font is bold-only, so body copy uses a true regular face. */
+p {
+  font-family:
+    "Microsoft Sans Serif",
+    Tahoma,
+    Arial,
+    sans-serif;
+  font-weight: 400 !important;
 }
 
 button,
