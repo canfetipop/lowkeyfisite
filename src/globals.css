@@ -1,8 +1,16 @@
 @font-face {
   font-family: "MSW98UI";
+  src: url("/fonts/MSW98UI-Regular.otf") format("opentype");
+  font-style: normal;
+  font-weight: 100 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MSW98UI";
   src: url("/fonts/MSW98UI-Bold.otf") format("opentype");
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 700 900;
   font-display: swap;
 }
 
@@ -25,8 +33,6 @@
 
 * {
   box-sizing: border-box;
-  scrollbar-color: #7f7f7f #d4d4d4;
-  scrollbar-width: auto;
 }
 
 *::-webkit-scrollbar {
@@ -38,6 +44,7 @@
 *::-webkit-scrollbar-track-piece {
   background:
     repeating-conic-gradient(#ffffff 0 25%, #c7c7c7 0 50%) 0 0 / 4px 4px;
+  border-radius: 0;
   border-right: 2px solid #ffffff;
   border-left: 2px solid #7f7f7f;
 }
@@ -46,6 +53,7 @@
   min-height: 54px;
   min-width: 54px;
   background: #c6c6c6;
+  border-radius: 0;
   border: 3px solid;
   border-color: #ffffff #404040 #404040 #ffffff;
   box-shadow:
@@ -59,6 +67,7 @@
   background-color: #c6c6c6;
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: 0;
   border: 3px solid;
   border-color: #ffffff #404040 #404040 #ffffff;
   box-shadow:
@@ -134,6 +143,8 @@ body {
 /* The bundled pixel font is bold-only, so body copy uses a true regular face. */
 p {
   font-family:
+    "MSW98UI",
+    "MS Sans Serif",
     "Microsoft Sans Serif",
     Tahoma,
     Arial,
@@ -1153,12 +1164,6 @@ img {
 .rich-text-content p {
   max-width: 100%;
   margin: 0 0 24px;
-  font-family:
-    "MS Sans Serif",
-    "Microsoft Sans Serif",
-    Tahoma,
-    Arial,
-    sans-serif;
   font-weight: 400;
   white-space: normal;
   overflow-wrap: anywhere;
@@ -1194,12 +1199,6 @@ img {
 
 .rich-text-content li {
   margin: 8px 0;
-  font-family:
-    "MS Sans Serif",
-    "Microsoft Sans Serif",
-    Tahoma,
-    Arial,
-    sans-serif;
   font-weight: 400;
 }
 
@@ -1214,12 +1213,6 @@ img {
 .rich-text-content blockquote {
   margin: 24px 0;
   padding: 12px 20px;
-  font-family:
-    "MS Sans Serif",
-    "Microsoft Sans Serif",
-    Tahoma,
-    Arial,
-    sans-serif;
   font-weight: 400;
   background: rgba(255, 255, 255, 0.35);
   border-left: 5px solid var(--windows-blue);
@@ -1272,12 +1265,6 @@ img {
 }
 
 .rich-text-content td {
-  font-family:
-    "MS Sans Serif",
-    "Microsoft Sans Serif",
-    Tahoma,
-    Arial,
-    sans-serif;
   font-weight: 400;
 }
 
