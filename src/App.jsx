@@ -13,8 +13,8 @@ import { posts, site } from "./lib/content";
 const DESIGN_WIDTH = 1920;
 const DESIGN_HEIGHT = 1080;
 const COMPACT_DESIGN_WIDTH = 1440;
+const MIN_DESIGN_HEIGHT = 960;
 const COMPACT_ASPECT_RATIO = 1.35;
-const COMPACT_MAX_WIDTH = 1280;
 const MINIMIZED_WIDTH = 720;
 const MINIMIZED_HEIGHT = 74;
 
@@ -88,11 +88,11 @@ export default function LowkeyfiPage() {
 
   useEffect(() => {
     function updateWindowScale() {
+      const viewportWidth = Math.max(window.visualViewport?.width ?? window.innerWidth, 1);
+      const viewportHeight = Math.max(window.visualViewport?.height ?? window.innerHeight, 1);
+      const viewportAspectRatio = viewportWidth / viewportHeight;
       const nextCompactLayout = !isMinimized
-        && (
-          window.innerWidth <= COMPACT_MAX_WIDTH
-          || window.innerWidth / window.innerHeight < COMPACT_ASPECT_RATIO
-        );
+        && viewportAspectRatio < COMPACT_ASPECT_RATIO;
       const designWidth = isMinimized
         ? MINIMIZED_WIDTH
         : nextCompactLayout
@@ -100,26 +100,28 @@ export default function LowkeyfiPage() {
           : DESIGN_WIDTH;
       const designHeight = isMinimized
         ? MINIMIZED_HEIGHT
-        : nextCompactLayout
-          ? Math.max(
-            DESIGN_HEIGHT,
-            COMPACT_DESIGN_WIDTH * (window.innerHeight / window.innerWidth),
-          )
-          : DESIGN_HEIGHT;
+        : Math.max(
+          MIN_DESIGN_HEIGHT,
+          designWidth * (viewportHeight / viewportWidth),
+        );
       const nextScale = Math.min(
-        window.innerWidth / designWidth,
-        window.innerHeight / designHeight,
+        viewportWidth / designWidth,
+        viewportHeight / designHeight,
       );
 
       setIsCompactLayout(nextCompactLayout);
       setDesignSize({ width: designWidth, height: designHeight });
-      setWindowScale(Math.max(Math.min(nextScale, 1), 0.1));
+      setWindowScale(Math.max(isMinimized ? Math.min(nextScale, 1) : nextScale, 0.1));
       setScaleIsReady(true);
     }
 
     updateWindowScale();
     window.addEventListener("resize", updateWindowScale);
-    return () => window.removeEventListener("resize", updateWindowScale);
+    window.visualViewport?.addEventListener("resize", updateWindowScale);
+    return () => {
+      window.removeEventListener("resize", updateWindowScale);
+      window.visualViewport?.removeEventListener("resize", updateWindowScale);
+    };
   }, [isMinimized]);
 
   useEffect(() => {
