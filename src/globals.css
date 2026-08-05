@@ -724,6 +724,7 @@ img {
 .home-view {
   height: 100%;
   padding: 51px 68px 37px 70px;
+  overflow-y: auto;
 }
 
 .home-hero {
@@ -900,6 +901,11 @@ img {
 .lab-view {
   height: 100%;
   padding: 52px 70px 48px;
+}
+
+.posts-view,
+.lab-view {
+  overflow-y: auto;
 }
 
 .posts-view__intro,
@@ -1395,6 +1401,7 @@ img {
 .about-view {
   height: 100%;
   padding: 52px 70px 48px;
+  overflow-y: auto;
 }
 
 .about-view__image-frame {
@@ -1441,6 +1448,7 @@ img {
 .contact-view {
   height: 100%;
   padding: 52px 70px 48px;
+  overflow-y: auto;
 }
 
 .contact-view__intro {

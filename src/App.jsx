@@ -13,7 +13,6 @@ import { posts, site } from "./lib/content";
 const DESIGN_WIDTH = 1920;
 const DESIGN_HEIGHT = 1080;
 const COMPACT_DESIGN_WIDTH = 1440;
-const MIN_DESIGN_HEIGHT = 960;
 const COMPACT_ASPECT_RATIO = 1.35;
 const MINIMIZED_WIDTH = 720;
 const MINIMIZED_HEIGHT = 74;
@@ -100,10 +99,7 @@ export default function LowkeyfiPage() {
           : DESIGN_WIDTH;
       const designHeight = isMinimized
         ? MINIMIZED_HEIGHT
-        : Math.max(
-          MIN_DESIGN_HEIGHT,
-          designWidth * (viewportHeight / viewportWidth),
-        );
+        : designWidth * (viewportHeight / viewportWidth);
       const nextScale = Math.min(
         viewportWidth / designWidth,
         viewportHeight / designHeight,
