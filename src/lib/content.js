@@ -37,7 +37,13 @@ export function assetUrl(path) {
     return path;
   }
 
-  return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+  const basePath = import.meta.env.BASE_URL;
+
+  if (path.startsWith(basePath)) {
+    return path;
+  }
+
+  return `${basePath}${path.replace(/^\/+/, "")}`;
 }
 
 export function formatPostDate(date) {

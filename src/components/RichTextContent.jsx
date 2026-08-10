@@ -1,5 +1,6 @@
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { assetUrl } from "../lib/content";
 
 function linkUrl(href = "") {
   if (!href || /^(?:[a-z]+:|#|\/\/)/i.test(href)) {
@@ -54,6 +55,9 @@ export default function RichTextContent({ text = "" }) {
                 {children}
               </a>
             );
+          },
+          img({ node: _node, src, alt = "", ...props }) {
+            return <img src={assetUrl(src)} alt={alt} {...props} />;
           },
           table({ node: _node, children, ...props }) {
             return (
