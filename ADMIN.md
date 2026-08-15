@@ -55,8 +55,11 @@ repository and its Git history.
 
 ## Future custom domain
 
-Do not add a `CNAME` file until `lowkey-fi.com` has been purchased and its DNS is
-configured. When the domain is ready, add `public/CNAME` containing
-`lowkey-fi.com` and set `LOWKEYFI_CUSTOM_DOMAIN: "true"` for the build step in
-`.github/workflows/deploy-pages.yml`. This switches Vite from `/lowkeyfisite/`
-asset paths to root-domain paths without changing content URLs.
+Do not change the deployment until `lowkey-fi.com` has been purchased. When the
+domain is ready, configure it under the repository's **Settings > Pages**, add
+the DNS records GitHub provides, and set `LOWKEYFI_CUSTOM_DOMAIN: "true"` for
+the build step in `.github/workflows/deploy-pages.yml`. This switches Vite from
+`/lowkeyfisite/` asset paths to root-domain paths without changing content URLs.
+
+This repository deploys with GitHub Actions, so a committed `CNAME` file is not
+required; GitHub's Pages settings are the source of truth for the domain.
