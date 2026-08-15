@@ -9,7 +9,31 @@ LowKeyFI uses GitHub as its content store. It does not require a database.
 3. Visit [Pages CMS](https://app.pagescms.org), sign in with the GitHub account that owns the repository, and install/authorize the Pages CMS GitHub App for `lowkeyfisite`.
 4. Select the `canfetipop/lowkeyfisite` repository and the `main` branch.
 
-The site's `/admin/` page provides a shortcut to the editor.
+The site's `/admin/` page includes a focused post/resource writing editor and a
+shortcut to PagesCMS for full-site configuration.
+
+## Writing editor
+
+The writing editor saves drafts to the current browser automatically. Browser
+drafts do not create Git commits or deployments. Use **Publish to GitHub** when
+the draft is ready; publishing creates one commit and starts the Pages workflow.
+
+The editor asks for a fine-grained GitHub access token with Contents read/write
+permission for only `canfetipop/lowkeyfisite`. It stores that token in
+`sessionStorage`, so closing the browser tab signs the editor out. The token is
+never included in the website source or committed to the repository.
+
+Useful shortcuts:
+
+- `Ctrl+K`: add a link
+- `Ctrl+B`: bold
+- `Ctrl+I`: italic
+- `Ctrl+Alt+2` / `Ctrl+Alt+3`: heading
+- `Ctrl+S`: save the browser draft immediately
+- `Ctrl+Shift+S`: publish to GitHub
+
+PagesCMS remains the editor for site colors, navigation, images, and other page
+settings.
 
 ## What is editable
 
@@ -28,3 +52,11 @@ The site normally updates after the workflow finishes.
 
 Uploaded images are stored in `public/images/uploads` and remain part of the
 repository and its Git history.
+
+## Future custom domain
+
+Do not add a `CNAME` file until `lowkey-fi.com` has been purchased and its DNS is
+configured. When the domain is ready, add `public/CNAME` containing
+`lowkey-fi.com` and set `LOWKEYFI_CUSTOM_DOMAIN: "true"` for the build step in
+`.github/workflows/deploy-pages.yml`. This switches Vite from `/lowkeyfisite/`
+asset paths to root-domain paths without changing content URLs.
