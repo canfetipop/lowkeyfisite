@@ -180,6 +180,58 @@ img {
   transform: translate(-50%, -50%);
 }
 
+.zoom-controls {
+  position: absolute;
+  top: clamp(56px, 7vh, 78px);
+  right: clamp(10px, 1.5vw, 28px);
+  z-index: 30;
+
+  display: grid;
+  grid-template-columns: 42px minmax(72px, auto) 42px;
+  gap: 3px;
+  padding: 4px;
+
+  color: #111111;
+  background: #d4d4d4;
+  border: 2px solid;
+  border-color: #ffffff #242424 #242424 #ffffff;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.32);
+}
+
+.zoom-controls button {
+  min-width: 0;
+  height: 34px;
+  padding: 2px 7px;
+
+  color: #111111;
+  background: #d4d4d4;
+  border: 2px solid;
+  border-color: #ffffff #303030 #303030 #ffffff;
+}
+
+.zoom-controls button:hover:not(:disabled),
+.zoom-controls button:focus-visible:not(:disabled) {
+  color: var(--windows-blue);
+  outline: 1px dotted var(--windows-blue);
+  outline-offset: -5px;
+}
+
+.zoom-controls button:active:not(:disabled) {
+  padding: 4px 5px 0 9px;
+  border-color: #303030 #ffffff #ffffff #303030;
+}
+
+.zoom-controls button:disabled {
+  color: #777777;
+  cursor: default;
+  text-shadow: 1px 1px #ffffff;
+}
+
+.zoom-controls__percentage {
+  color: var(--windows-blue) !important;
+  white-space: nowrap;
+}
+
 .desktop-window {
   display: grid;
   grid-template-rows:
