@@ -16,6 +16,9 @@ const COMPACT_DESIGN_WIDTH = 1440;
 const COMPACT_ASPECT_RATIO = 1.35;
 const MINIMIZED_WIDTH = 720;
 const MINIMIZED_HEIGHT = 74;
+const MIN_USER_ZOOM = 0.5;
+const MAX_USER_ZOOM = 1.75;
+const KEYBOARD_ZOOM_STEP = 0.1;
 
 const VIEW_COMPONENTS = {
   home: HomeView,
@@ -72,9 +75,14 @@ function browserPath(route) {
   return `${basePath}${route === "/" ? "/" : route}`;
 }
 
+function clampZoom(value) {
+  return Math.min(Math.max(value, MIN_USER_ZOOM), MAX_USER_ZOOM);
+}
+
 export default function LowkeyfiPage() {
   const [route, setRoute] = useState(() => parseRoute(window.location.pathname));
-  const [windowScale, setWindowScale] = useState(1);
+  const [automaticScale, setAutomaticScale] = useState(1);
+  const [userZoom, setUserZoom] = useState(1);
   const [scaleIsReady, setScaleIsReady] = useState(false);
   const [isCompactLayout, setIsCompactLayout] = useState(false);
   const [designSize, setDesignSize] = useState({
@@ -87,8 +95,10 @@ export default function LowkeyfiPage() {
 
   useEffect(() => {
     function updateWindowScale() {
-      const viewportWidth = Math.max(window.visualViewport?.width ?? window.innerWidth, 1);
-      const viewportHeight = Math.max(window.visualViewport?.height ?? window.innerHeight, 1);
+      // Use the layout viewport so touchpad pinch gestures do not repeatedly
+      // resize and reposition the retro window through visualViewport changes.
+      const viewportWidth = Math.max(window.innerWidth, 1);
+      const viewportHeight = Math.max(window.innerHeight, 1);
       const viewportAspectRatio = viewportWidth / viewportHeight;
       const nextCompactLayout = !isMinimized
         && viewportAspectRatio < COMPACT_ASPECT_RATIO;
@@ -107,18 +117,60 @@ export default function LowkeyfiPage() {
 
       setIsCompactLayout(nextCompactLayout);
       setDesignSize({ width: designWidth, height: designHeight });
-      setWindowScale(Math.max(isMinimized ? Math.min(nextScale, 1) : nextScale, 0.1));
+      setAutomaticScale(Math.max(isMinimized ? Math.min(nextScale, 1) : nextScale, 0.1));
       setScaleIsReady(true);
     }
 
     updateWindowScale();
     window.addEventListener("resize", updateWindowScale);
-    window.visualViewport?.addEventListener("resize", updateWindowScale);
     return () => {
       window.removeEventListener("resize", updateWindowScale);
-      window.visualViewport?.removeEventListener("resize", updateWindowScale);
     };
   }, [isMinimized]);
+
+  useEffect(() => {
+    function changeZoom(amount) {
+      setUserZoom((current) => clampZoom(Number((current + amount).toFixed(2))));
+    }
+
+    function handleZoomShortcut(event) {
+      if (!(event.ctrlKey || event.metaKey)) return;
+
+      if (event.key === "=" || event.key === "+") {
+        event.preventDefault();
+        changeZoom(KEYBOARD_ZOOM_STEP);
+      } else if (event.key === "-") {
+        event.preventDefault();
+        changeZoom(-KEYBOARD_ZOOM_STEP);
+      } else if (event.key === "0") {
+        event.preventDefault();
+        setUserZoom(1);
+      }
+    }
+
+    function handlePinchZoom(event) {
+      if (!event.ctrlKey) return;
+
+      event.preventDefault();
+      const change = Math.min(Math.max(-event.deltaY * 0.0025, -0.12), 0.12);
+      changeZoom(change);
+    }
+
+    function preventNativeGesture(event) {
+      event.preventDefault();
+    }
+
+    window.addEventListener("keydown", handleZoomShortcut);
+    window.addEventListener("wheel", handlePinchZoom, { passive: false });
+    document.addEventListener("gesturestart", preventNativeGesture, { passive: false });
+    document.addEventListener("gesturechange", preventNativeGesture, { passive: false });
+    return () => {
+      window.removeEventListener("keydown", handleZoomShortcut);
+      window.removeEventListener("wheel", handlePinchZoom);
+      document.removeEventListener("gesturestart", preventNativeGesture);
+      document.removeEventListener("gesturechange", preventNativeGesture);
+    };
+  }, []);
 
   useEffect(() => {
     const handlePopState = () => setRoute(parseRoute(window.location.pathname));
@@ -132,6 +184,12 @@ export default function LowkeyfiPage() {
   }, []);
 
   const ActiveView = VIEW_COMPONENTS[route.view] ?? HomeView;
+  const windowScale = Math.max(
+    isMinimized
+      ? Math.min(automaticScale * userZoom, 1)
+      : automaticScale * userZoom,
+    0.1,
+  );
   const frameSize = useMemo(() => ({
     width: designSize.width * windowScale,
     height: designSize.height * windowScale,

@@ -162,17 +162,22 @@ img {
 }
 
 .site-stage {
+  position: relative;
   display: grid;
   width: 100vw;
   height: 100vh;
   place-items: center;
   overflow: hidden;
+  overscroll-behavior: none;
   background: var(--stage-background);
 }
 
 .scaled-window-frame {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   flex: none;
+  transform: translate(-50%, -50%);
 }
 
 .desktop-window {
