@@ -16,7 +16,7 @@ const COMPACT_DESIGN_WIDTH = 1440;
 const COMPACT_ASPECT_RATIO = 1.35;
 const MINIMIZED_WIDTH = 720;
 const MINIMIZED_HEIGHT = 74;
-const MIN_USER_ZOOM = 0.5;
+const MIN_USER_ZOOM = 1;
 const MAX_USER_ZOOM = 1.75;
 const KEYBOARD_ZOOM_STEP = 0.1;
 
@@ -79,10 +79,18 @@ function clampZoom(value) {
   return Math.min(Math.max(value, MIN_USER_ZOOM), MAX_USER_ZOOM);
 }
 
+function clamp(value, minimum, maximum) {
+  return Math.min(Math.max(value, minimum), maximum);
+}
+
 export default function LowkeyfiPage() {
   const [route, setRoute] = useState(() => parseRoute(window.location.pathname));
   const [automaticScale, setAutomaticScale] = useState(1);
-  const [userZoom, setUserZoom] = useState(1);
+  const [viewportTransform, setViewportTransform] = useState({
+    zoom: 1,
+    panX: 0,
+    panY: 0,
+  });
   const [scaleIsReady, setScaleIsReady] = useState(false);
   const [isCompactLayout, setIsCompactLayout] = useState(false);
   const [designSize, setDesignSize] = useState({
@@ -129,8 +137,42 @@ export default function LowkeyfiPage() {
   }, [isMinimized]);
 
   useEffect(() => {
-    function changeZoom(amount) {
-      setUserZoom((current) => clampZoom(Number((current + amount).toFixed(2))));
+    function constrainTransform(transform) {
+      const scale = Math.max(
+        isMinimized
+          ? Math.min(automaticScale * transform.zoom, 1)
+          : automaticScale * transform.zoom,
+        0.1,
+      );
+      const frameWidth = designSize.width * scale;
+      const frameHeight = designSize.height * scale;
+      const maximumPanX = Math.max((frameWidth - window.innerWidth) / 2, 0);
+      const maximumPanY = Math.max((frameHeight - window.innerHeight) / 2, 0);
+
+      return {
+        zoom: transform.zoom,
+        panX: clamp(transform.panX, -maximumPanX, maximumPanX),
+        panY: clamp(transform.panY, -maximumPanY, maximumPanY),
+      };
+    }
+
+    function changeZoom(amount, anchorX = window.innerWidth / 2, anchorY = window.innerHeight / 2) {
+      setViewportTransform((current) => {
+        const nextZoom = clampZoom(Number((current.zoom + amount).toFixed(2)));
+        if (nextZoom === current.zoom) return current;
+
+        const zoomRatio = nextZoom / current.zoom;
+        const cursorFromCenterX = anchorX - window.innerWidth / 2;
+        const cursorFromCenterY = anchorY - window.innerHeight / 2;
+        const nextTransform = {
+          zoom: nextZoom,
+          // Keep the same content point underneath the cursor as zoom changes.
+          panX: cursorFromCenterX - (cursorFromCenterX - current.panX) * zoomRatio,
+          panY: cursorFromCenterY - (cursorFromCenterY - current.panY) * zoomRatio,
+        };
+
+        return constrainTransform(nextTransform);
+      });
     }
 
     function handleZoomShortcut(event) {
@@ -144,16 +186,31 @@ export default function LowkeyfiPage() {
         changeZoom(-KEYBOARD_ZOOM_STEP);
       } else if (event.key === "0") {
         event.preventDefault();
-        setUserZoom(1);
+        setViewportTransform({ zoom: 1, panX: 0, panY: 0 });
       }
     }
 
-    function handlePinchZoom(event) {
-      if (!event.ctrlKey) return;
+    function handleTouchpad(event) {
+      if (event.ctrlKey) {
+        event.preventDefault();
+        const change = Math.min(Math.max(-event.deltaY * 0.0025, -0.12), 0.12);
+        changeZoom(change, event.clientX, event.clientY);
+        return;
+      }
+
+      if (viewportTransform.zoom <= 1 || isMinimized) return;
 
       event.preventDefault();
-      const change = Math.min(Math.max(-event.deltaY * 0.0025, -0.12), 0.12);
-      changeZoom(change);
+      const deltaMultiplier = event.deltaMode === 1
+        ? 24
+        : event.deltaMode === 2
+          ? window.innerHeight
+          : 1;
+      setViewportTransform((current) => constrainTransform({
+        ...current,
+        panX: current.panX - event.deltaX * deltaMultiplier,
+        panY: current.panY - event.deltaY * deltaMultiplier,
+      }));
     }
 
     function preventNativeGesture(event) {
@@ -161,16 +218,35 @@ export default function LowkeyfiPage() {
     }
 
     window.addEventListener("keydown", handleZoomShortcut);
-    window.addEventListener("wheel", handlePinchZoom, { passive: false });
+    window.addEventListener("wheel", handleTouchpad, { passive: false });
     document.addEventListener("gesturestart", preventNativeGesture, { passive: false });
     document.addEventListener("gesturechange", preventNativeGesture, { passive: false });
     return () => {
       window.removeEventListener("keydown", handleZoomShortcut);
-      window.removeEventListener("wheel", handlePinchZoom);
+      window.removeEventListener("wheel", handleTouchpad);
       document.removeEventListener("gesturestart", preventNativeGesture);
       document.removeEventListener("gesturechange", preventNativeGesture);
     };
-  }, []);
+  }, [automaticScale, designSize, isMinimized, viewportTransform.zoom]);
+
+  useEffect(() => {
+    setViewportTransform((current) => {
+      const scale = Math.max(
+        isMinimized
+          ? Math.min(automaticScale * current.zoom, 1)
+          : automaticScale * current.zoom,
+        0.1,
+      );
+      const maximumPanX = Math.max((designSize.width * scale - window.innerWidth) / 2, 0);
+      const maximumPanY = Math.max((designSize.height * scale - window.innerHeight) / 2, 0);
+      const panX = clamp(current.panX, -maximumPanX, maximumPanX);
+      const panY = clamp(current.panY, -maximumPanY, maximumPanY);
+
+      return panX === current.panX && panY === current.panY
+        ? current
+        : { ...current, panX, panY };
+    });
+  }, [automaticScale, designSize, isMinimized]);
 
   useEffect(() => {
     const handlePopState = () => setRoute(parseRoute(window.location.pathname));
@@ -186,8 +262,8 @@ export default function LowkeyfiPage() {
   const ActiveView = VIEW_COMPONENTS[route.view] ?? HomeView;
   const windowScale = Math.max(
     isMinimized
-      ? Math.min(automaticScale * userZoom, 1)
-      : automaticScale * userZoom,
+      ? Math.min(automaticScale * viewportTransform.zoom, 1)
+      : automaticScale * viewportTransform.zoom,
     0.1,
   );
   const frameSize = useMemo(() => ({
@@ -251,6 +327,8 @@ export default function LowkeyfiPage() {
           style={{
             width: `${frameSize.width}px`,
             height: `${frameSize.height}px`,
+            left: `calc(50% + ${viewportTransform.panX}px)`,
+            top: `calc(50% + ${viewportTransform.panY}px)`,
             visibility: scaleIsReady ? "visible" : "hidden",
           }}
         >
