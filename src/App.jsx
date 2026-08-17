@@ -16,13 +16,6 @@ const COMPACT_DESIGN_WIDTH = 1440;
 const COMPACT_ASPECT_RATIO = 1.35;
 const MINIMIZED_WIDTH = 720;
 const MINIMIZED_HEIGHT = 74;
-const MIN_USER_ZOOM = 1;
-const MAX_USER_ZOOM = 3;
-const KEYBOARD_ZOOM_STEP = 0.1;
-const PINCH_ZOOM_SENSITIVITY = 0.007;
-const PAN_SPEED = 1.35;
-const PAN_OVERSCAN_RATIO = 0.35;
-const ARROW_PAN_DISTANCE = 48;
 
 const VIEW_COMPONENTS = {
   home: HomeView,
@@ -79,23 +72,11 @@ function browserPath(route) {
   return `${basePath}${route === "/" ? "/" : route}`;
 }
 
-function clampZoom(value) {
-  return Math.min(Math.max(value, MIN_USER_ZOOM), MAX_USER_ZOOM);
-}
-
-function clamp(value, minimum, maximum) {
-  return Math.min(Math.max(value, minimum), maximum);
-}
-
 export default function LowkeyfiPage() {
   const [route, setRoute] = useState(() => parseRoute(window.location.pathname));
   const [automaticScale, setAutomaticScale] = useState(1);
-  const [viewportTransform, setViewportTransform] = useState({
-    zoom: 1,
-    panX: 0,
-    panY: 0,
-  });
-  const viewportTransformRef = useRef(viewportTransform);
+  const initialDevicePixelRatio = useRef(window.devicePixelRatio || 1);
+  const [nativeZoomIsActive, setNativeZoomIsActive] = useState(false);
   const [scaleIsReady, setScaleIsReady] = useState(false);
   const [isCompactLayout, setIsCompactLayout] = useState(false);
   const [designSize, setDesignSize] = useState({
@@ -106,67 +87,19 @@ export default function LowkeyfiPage() {
   const [isFullscreen, setIsFullscreen] = useState(Boolean(document.fullscreenElement));
   const [isClosed, setIsClosed] = useState(false);
 
-  viewportTransformRef.current = viewportTransform;
-
-  function constrainTransform(transform) {
-    const scale = Math.max(
-      isMinimized
-        ? Math.min(automaticScale * transform.zoom, 1)
-        : automaticScale * transform.zoom,
-      0.1,
-    );
-    const frameWidth = designSize.width * scale;
-    const frameHeight = designSize.height * scale;
-    const overscanX = transform.zoom > 1 ? window.innerWidth * PAN_OVERSCAN_RATIO : 0;
-    const overscanY = transform.zoom > 1 ? window.innerHeight * PAN_OVERSCAN_RATIO : 0;
-    const maximumPanX = Math.max((frameWidth - window.innerWidth) / 2, 0) + overscanX;
-    const maximumPanY = Math.max((frameHeight - window.innerHeight) / 2, 0) + overscanY;
-
-    return {
-      zoom: transform.zoom,
-      panX: clamp(transform.panX, -maximumPanX, maximumPanX),
-      panY: clamp(transform.panY, -maximumPanY, maximumPanY),
-    };
-  }
-
-  function zoomAtAnchor(getNextZoom, anchorX = window.innerWidth / 2, anchorY = window.innerHeight / 2) {
-    setViewportTransform((current) => {
-      const requestedZoom = typeof getNextZoom === "function"
-        ? getNextZoom(current.zoom)
-        : getNextZoom;
-      const nextZoom = clampZoom(Number(requestedZoom.toFixed(3)));
-      if (nextZoom === current.zoom) return current;
-
-      const zoomRatio = nextZoom / current.zoom;
-      const cursorFromCenterX = anchorX - window.innerWidth / 2;
-      const cursorFromCenterY = anchorY - window.innerHeight / 2;
-      return constrainTransform({
-        zoom: nextZoom,
-        // Preserve the content point directly underneath the cursor.
-        panX: cursorFromCenterX - (cursorFromCenterX - current.panX) * zoomRatio,
-        panY: cursorFromCenterY - (cursorFromCenterY - current.panY) * zoomRatio,
-      });
-    });
-  }
-
-  function panViewportBy(deltaX, deltaY) {
-    setViewportTransform((current) => constrainTransform({
-      ...current,
-      panX: current.panX + deltaX,
-      panY: current.panY + deltaY,
-    }));
-  }
-
-  function resetViewport() {
-    setViewportTransform({ zoom: 1, panX: 0, panY: 0 });
-  }
-
   useEffect(() => {
     function updateWindowScale() {
-      // Use the layout viewport so touchpad pinch gestures do not repeatedly
-      // resize and reposition the retro window through visualViewport changes.
-      const viewportWidth = Math.max(window.innerWidth, 1);
-      const viewportHeight = Math.max(window.innerHeight, 1);
+      // Normalize out native browser page zoom. This keeps the initial laptop-fit
+      // presentation responsive to actual window resizing without shrinking the
+      // site back down when Ctrl/Cmd zoom changes the CSS viewport dimensions.
+      const browserZoomRatio = Math.max(
+        (window.devicePixelRatio || initialDevicePixelRatio.current)
+          / initialDevicePixelRatio.current,
+        0.1,
+      );
+      const viewportWidth = Math.max(window.innerWidth * browserZoomRatio, 1);
+      const viewportHeight = Math.max(window.innerHeight * browserZoomRatio, 1);
+      const visualZoomRatio = window.visualViewport?.scale ?? 1;
       const viewportAspectRatio = viewportWidth / viewportHeight;
       const nextCompactLayout = !isMinimized
         && viewportAspectRatio < COMPACT_ASPECT_RATIO;
@@ -186,113 +119,23 @@ export default function LowkeyfiPage() {
       setIsCompactLayout(nextCompactLayout);
       setDesignSize({ width: designWidth, height: designHeight });
       setAutomaticScale(Math.max(isMinimized ? Math.min(nextScale, 1) : nextScale, 0.1));
+      setNativeZoomIsActive(browserZoomRatio > 1.001 || visualZoomRatio > 1.001);
       setScaleIsReady(true);
     }
 
     updateWindowScale();
     window.addEventListener("resize", updateWindowScale);
+    window.visualViewport?.addEventListener("resize", updateWindowScale);
     return () => {
       window.removeEventListener("resize", updateWindowScale);
+      window.visualViewport?.removeEventListener("resize", updateWindowScale);
     };
   }, [isMinimized]);
 
   useEffect(() => {
-    function handleZoomShortcut(event) {
-      const target = event.target;
-      const isTyping = target instanceof HTMLInputElement
-        || target instanceof HTMLTextAreaElement
-        || target?.isContentEditable;
-
-      if ((event.ctrlKey || event.metaKey) && (event.key === "=" || event.key === "+")) {
-        event.preventDefault();
-        zoomAtAnchor((current) => current + KEYBOARD_ZOOM_STEP);
-      } else if ((event.ctrlKey || event.metaKey) && event.key === "-") {
-        event.preventDefault();
-        zoomAtAnchor((current) => current - KEYBOARD_ZOOM_STEP);
-      } else if ((event.ctrlKey || event.metaKey) && event.key === "0") {
-        event.preventDefault();
-        resetViewport();
-      } else if (!isTyping && event.shiftKey && event.key === "1") {
-        event.preventDefault();
-        resetViewport();
-      } else if (!isTyping && viewportTransformRef.current.zoom > 1 && event.key.startsWith("Arrow")) {
-        event.preventDefault();
-        const distance = ARROW_PAN_DISTANCE * (event.shiftKey ? 3 : 1);
-        if (event.key === "ArrowLeft") panViewportBy(distance, 0);
-        if (event.key === "ArrowRight") panViewportBy(-distance, 0);
-        if (event.key === "ArrowUp") panViewportBy(0, distance);
-        if (event.key === "ArrowDown") panViewportBy(0, -distance);
-      }
-    }
-
-    function handleTouchpad(event) {
-      if (event.ctrlKey) {
-        event.preventDefault();
-        const zoomFactor = clamp(
-          Math.exp(-event.deltaY * PINCH_ZOOM_SENSITIVITY),
-          0.82,
-          1.22,
-        );
-        zoomAtAnchor((current) => current * zoomFactor, event.clientX, event.clientY);
-        return;
-      }
-
-      if (viewportTransformRef.current.zoom <= 1 || isMinimized) return;
-
-      event.preventDefault();
-      const deltaMultiplier = event.deltaMode === 1
-        ? 24
-        : event.deltaMode === 2
-          ? window.innerHeight
-          : 1;
-      const horizontalDelta = event.shiftKey && Math.abs(event.deltaX) < 0.5
-        ? event.deltaY
-        : event.deltaX;
-      const verticalDelta = event.shiftKey && Math.abs(event.deltaX) < 0.5
-        ? 0
-        : event.deltaY;
-      panViewportBy(
-        -horizontalDelta * deltaMultiplier * PAN_SPEED,
-        -verticalDelta * deltaMultiplier * PAN_SPEED,
-      );
-    }
-
-    function preventNativeGesture(event) {
-      event.preventDefault();
-    }
-
-    window.addEventListener("keydown", handleZoomShortcut);
-    window.addEventListener("wheel", handleTouchpad, { passive: false });
-    document.addEventListener("gesturestart", preventNativeGesture, { passive: false });
-    document.addEventListener("gesturechange", preventNativeGesture, { passive: false });
-    return () => {
-      window.removeEventListener("keydown", handleZoomShortcut);
-      window.removeEventListener("wheel", handleTouchpad);
-      document.removeEventListener("gesturestart", preventNativeGesture);
-      document.removeEventListener("gesturechange", preventNativeGesture);
-    };
-  }, [automaticScale, designSize, isMinimized]);
-
-  useEffect(() => {
-    setViewportTransform((current) => {
-      const scale = Math.max(
-        isMinimized
-          ? Math.min(automaticScale * current.zoom, 1)
-          : automaticScale * current.zoom,
-        0.1,
-      );
-      const overscanX = current.zoom > 1 ? window.innerWidth * PAN_OVERSCAN_RATIO : 0;
-      const overscanY = current.zoom > 1 ? window.innerHeight * PAN_OVERSCAN_RATIO : 0;
-      const maximumPanX = Math.max((designSize.width * scale - window.innerWidth) / 2, 0) + overscanX;
-      const maximumPanY = Math.max((designSize.height * scale - window.innerHeight) / 2, 0) + overscanY;
-      const panX = clamp(current.panX, -maximumPanX, maximumPanX);
-      const panY = clamp(current.panY, -maximumPanY, maximumPanY);
-
-      return panX === current.panX && panY === current.panY
-        ? current
-        : { ...current, panX, panY };
-    });
-  }, [automaticScale, designSize, isMinimized]);
+    document.documentElement.classList.toggle("native-page-zoomed", nativeZoomIsActive);
+    return () => document.documentElement.classList.remove("native-page-zoomed");
+  }, [nativeZoomIsActive]);
 
   useEffect(() => {
     const handlePopState = () => setRoute(parseRoute(window.location.pathname));
@@ -307,9 +150,7 @@ export default function LowkeyfiPage() {
 
   const ActiveView = VIEW_COMPONENTS[route.view] ?? HomeView;
   const windowScale = Math.max(
-    isMinimized
-      ? Math.min(automaticScale * viewportTransform.zoom, 1)
-      : automaticScale * viewportTransform.zoom,
+    isMinimized ? Math.min(automaticScale, 1) : automaticScale,
     0.1,
   );
   const frameSize = useMemo(() => ({
@@ -357,40 +198,10 @@ export default function LowkeyfiPage() {
         "--windows-gray": site.theme.windowColor,
         "--stage-background": site.theme.pageBackground,
         "--panel-radius": site.theme.cornerStyle === "square" ? "2px" : "10px",
+        minWidth: isClosed ? "100%" : `${frameSize.width}px`,
+        minHeight: isClosed ? "100vh" : `${frameSize.height}px`,
       }}
     >
-      {!isClosed && !isMinimized && (
-        <div className="zoom-controls" aria-label="Zoom controls">
-          <button
-            type="button"
-            aria-label="Zoom out"
-            title="Zoom out (Ctrl+-)"
-            disabled={viewportTransform.zoom <= MIN_USER_ZOOM}
-            onClick={() => zoomAtAnchor((current) => current - KEYBOARD_ZOOM_STEP)}
-          >
-            −
-          </button>
-          <button
-            type="button"
-            className="zoom-controls__percentage"
-            aria-label={`Reset zoom, currently ${Math.round(viewportTransform.zoom * 100)} percent`}
-            title="Reset zoom (Ctrl+0 or Shift+1)"
-            onClick={resetViewport}
-          >
-            {Math.round(viewportTransform.zoom * 100)}%
-          </button>
-          <button
-            type="button"
-            aria-label="Zoom in"
-            title="Zoom in (Ctrl+=)"
-            disabled={viewportTransform.zoom >= MAX_USER_ZOOM}
-            onClick={() => zoomAtAnchor((current) => current + KEYBOARD_ZOOM_STEP)}
-          >
-            +
-          </button>
-        </div>
-      )}
-
       {isClosed ? (
         <section className="closed-screen" aria-label="LowKeyFI is closed">
           <div className="closed-screen__dialog">
@@ -405,8 +216,6 @@ export default function LowkeyfiPage() {
           style={{
             width: `${frameSize.width}px`,
             height: `${frameSize.height}px`,
-            left: `calc(50% + ${viewportTransform.panX}px)`,
-            top: `calc(50% + ${viewportTransform.panY}px)`,
             visibility: scaleIsReady ? "visible" : "hidden",
           }}
         >
