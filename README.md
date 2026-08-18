@@ -15,6 +15,16 @@ Create a production build with:
 npm run build
 ```
 
+The build begins with a privacy check and fails if private content is present
+in the public source tree.
+
+## Content and admin
+
+Posts, categories, drafts, and post media are managed in the private
+`emaeveky/lowkeyfi-content` repository. The authenticated `/admin/` dashboard
+previews all content and synchronizes only public categories/posts into this
+repository. See [ADMIN.md](./ADMIN.md) for setup and publishing instructions.
+
 ## Project structure
 
 - `public/images/` — static image assets

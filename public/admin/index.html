@@ -4,94 +4,153 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>LowKeyFI Writer</title>
+    <title>LowKeyFI Admin</title>
     <link rel="stylesheet" href="./admin.css" />
   </head>
   <body>
     <main class="admin-window">
       <header class="title-bar">
-        <span>lowkeyfi.exe — WRITER</span>
-        <a class="title-button" href="../../" aria-label="Return to website">×</a>
+        <span>lowkeyfi.exe — ADMIN</span>
+        <a class="title-button" href="../" aria-label="Return to website">×</a>
       </header>
 
       <section id="loginPanel" class="login-panel">
-        <h1>Writing editor</h1>
+        <h1>ADMIN SIGN IN</h1>
         <p>
-          Drafts autosave in this browser. Publishing requires a GitHub token with
-          write access to <strong>canfetipop/lowkeyfisite</strong>; the token is kept
-          only for this browser tab.
+          Sign in with a GitHub token that can read and write both
+          <strong>emaeveky/lowkeyfi-content</strong> and
+          <strong>canfetipop/lowkeyfisite</strong>.
         </p>
-        <label for="tokenInput">GitHub fine-grained access token</label>
+        <p class="security-note">
+          The token stays in this browser tab only. It is never added to the website or either repository.
+        </p>
+        <label for="tokenInput">GitHub personal access token</label>
         <div class="connect-row">
           <input id="tokenInput" type="password" autocomplete="off" spellcheck="false" />
-          <button id="connectButton" type="button">Connect</button>
+          <button id="connectButton" type="button">Sign in</button>
         </div>
-        <p class="small-note">
-          Prefer PagesCMS? Use it for site colors, navigation, images, and other full-site settings.
-        </p>
-        <a class="classic-button inline-button" href="https://app.pagescms.org" target="_blank" rel="noreferrer">Open PagesCMS</a>
         <p id="loginStatus" class="status-message" role="status"></p>
       </section>
 
       <section id="editorPanel" class="editor-panel" hidden>
-        <div class="editor-topline">
+        <div class="admin-command-bar">
           <div>
-            <label for="documentSelect">Document</label>
-            <select id="documentSelect"></select>
+            <strong id="signedInLabel">ADMIN MODE</strong>
+            <span id="saveState" class="save-state">Private source connected</span>
           </div>
           <div class="top-actions">
-            <button id="disconnectButton" type="button">Disconnect</button>
-            <a class="classic-button" href="https://app.pagescms.org" target="_blank" rel="noreferrer">Site settings</a>
+            <button id="refreshButton" type="button">Refresh</button>
+            <button id="syncButton" class="primary-button" type="button">Sync public site</button>
+            <a class="classic-button" href="https://app.pagescms.org" target="_blank" rel="noreferrer">Private PagesCMS</a>
+            <button id="disconnectButton" type="button">Sign out</button>
           </div>
         </div>
 
-        <div id="postFields" class="metadata-grid">
-          <label>Title <input id="titleInput" type="text" /></label>
-          <label>URL ID <input id="slugInput" type="text" spellcheck="false" /></label>
-          <label>Publish date <input id="dateInput" type="date" /></label>
-          <label class="wide-field">Subtitle <textarea id="excerptInput" rows="2"></textarea></label>
-          <label class="check-field"><input id="publishedInput" type="checkbox" /> Published</label>
-          <label class="check-field"><input id="featuredInput" type="checkbox" /> Feature on homepage</label>
-        </div>
-
-        <div class="body-heading">
-          <label for="bodyInput">Content</label>
-          <span id="saveState" class="save-state">No draft changes</span>
-        </div>
-
-        <div class="toolbar" role="toolbar" aria-label="Text formatting">
-          <button type="button" data-action="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
-          <button type="button" data-action="italic" title="Italic (Ctrl+I)"><em>I</em></button>
-          <button type="button" data-action="link" title="Link (Ctrl+K)">Link</button>
-          <button type="button" data-action="h2" title="Heading 2 (Ctrl+Alt+2)">H2</button>
-          <button type="button" data-action="h3" title="Heading 3 (Ctrl+Alt+3)">H3</button>
-          <button type="button" data-action="bullet" title="Bulleted list (Ctrl+Shift+8)">• List</button>
-          <button type="button" data-action="number" title="Numbered list (Ctrl+Shift+7)">1. List</button>
-          <button type="button" data-action="quote" title="Quote">Quote</button>
-          <button type="button" data-action="code" title="Inline code">Code</button>
-        </div>
-
-        <textarea id="bodyInput" class="body-editor" spellcheck="true" wrap="soft"></textarea>
-
-        <details class="shortcut-help">
-          <summary>Keyboard shortcuts</summary>
-          <div class="shortcut-grid">
-            <span><kbd>Ctrl</kbd> + <kbd>K</kbd></span><span>Add or edit a link</span>
-            <span><kbd>Ctrl</kbd> + <kbd>B</kbd></span><span>Bold</span>
-            <span><kbd>Ctrl</kbd> + <kbd>I</kbd></span><span>Italic</span>
-            <span><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>2/3</kbd></span><span>Heading</span>
-            <span><kbd>Ctrl</kbd> + <kbd>S</kbd></span><span>Save browser draft</span>
-            <span><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></span><span>Publish to GitHub</span>
+        <section class="admin-overview" aria-label="Visibility dashboard">
+          <div class="overview-stat">
+            <span>Categories</span>
+            <strong id="categoryCount">0</strong>
           </div>
+          <div class="overview-stat overview-stat--public">
+            <span>Public posts</span>
+            <strong id="publicPostCount">0</strong>
+          </div>
+          <div class="overview-stat overview-stat--private">
+            <span>Private posts</span>
+            <strong id="privatePostCount">0</strong>
+          </div>
+          <div class="overview-stat">
+            <span>Public deployment</span>
+            <strong id="deploymentState">Unknown</strong>
+          </div>
+        </section>
+
+        <div class="dashboard-layout">
+          <aside class="visibility-panel">
+            <section>
+              <div class="panel-heading-row">
+                <h2>CATEGORIES</h2>
+                <span>Private categories hide every post inside them.</span>
+              </div>
+              <div id="categoryList" class="visibility-list"></div>
+            </section>
+
+            <section>
+              <div class="panel-heading-row">
+                <h2>POSTS</h2>
+                <span>Toggle visibility or open a post in the editor.</span>
+              </div>
+              <div id="postList" class="visibility-list"></div>
+            </section>
+          </aside>
+
+          <section class="preview-panel">
+            <div class="preview-titlebar">
+              <strong>ADMIN PREVIEW — PUBLIC + PRIVATE</strong>
+              <span>Badges appear only here.</span>
+            </div>
+            <iframe id="previewFrame" title="Authenticated LowKeyFI preview" src="../"></iframe>
+          </section>
+        </div>
+
+        <details id="editorDrawer" class="editor-drawer">
+          <summary>POST EDITOR</summary>
+
+          <div class="editor-topline">
+            <div>
+              <label for="documentSelect">Private source document</label>
+              <select id="documentSelect"></select>
+            </div>
+          </div>
+
+          <div id="postFields" class="metadata-grid">
+            <label>Title <input id="titleInput" type="text" /></label>
+            <label>URL ID <input id="slugInput" type="text" spellcheck="false" /></label>
+            <label>Publish date <input id="dateInput" type="date" /></label>
+            <label class="wide-field">Subtitle <textarea id="excerptInput" rows="2"></textarea></label>
+            <label class="check-field"><input id="publishedInput" type="checkbox" /> Public</label>
+            <label class="check-field"><input id="featuredInput" type="checkbox" /> Feature on homepage</label>
+          </div>
+
+          <div class="body-heading">
+            <label for="bodyInput">Content</label>
+            <span>Drafts autosave locally until you save and synchronize.</span>
+          </div>
+
+          <div class="toolbar" role="toolbar" aria-label="Text formatting">
+            <button type="button" data-action="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+            <button type="button" data-action="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+            <button type="button" data-action="link" title="Link (Ctrl+K)">Link</button>
+            <button type="button" data-action="h2" title="Heading 2 (Ctrl+Alt+2)">H2</button>
+            <button type="button" data-action="h3" title="Heading 3 (Ctrl+Alt+3)">H3</button>
+            <button type="button" data-action="bullet" title="Bulleted list (Ctrl+Shift+8)">• List</button>
+            <button type="button" data-action="number" title="Numbered list (Ctrl+Shift+7)">1. List</button>
+            <button type="button" data-action="quote" title="Quote">Quote</button>
+            <button type="button" data-action="code" title="Inline code">Code</button>
+          </div>
+
+          <textarea id="bodyInput" class="body-editor" spellcheck="true" wrap="soft"></textarea>
+
+          <details class="shortcut-help">
+            <summary>Keyboard shortcuts</summary>
+            <div class="shortcut-grid">
+              <span><kbd>Ctrl/Cmd</kbd> + <kbd>K</kbd></span><span>Add or edit a link</span>
+              <span><kbd>Ctrl/Cmd</kbd> + <kbd>B</kbd></span><span>Bold</span>
+              <span><kbd>Ctrl/Cmd</kbd> + <kbd>I</kbd></span><span>Italic</span>
+              <span><kbd>Ctrl/Cmd</kbd> + <kbd>S</kbd></span><span>Save browser draft</span>
+              <span><kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></span><span>Save private source and sync public site</span>
+            </div>
+          </details>
+
+          <footer class="editor-footer">
+            <div>
+              <button id="discardButton" type="button">Discard local draft</button>
+              <button id="publishButton" class="primary-button" type="button">Save private + sync public</button>
+            </div>
+          </footer>
         </details>
 
-        <footer class="editor-footer">
-          <p id="editorStatus" class="status-message" role="status"></p>
-          <div>
-            <button id="discardButton" type="button">Discard local draft</button>
-            <button id="publishButton" class="primary-button" type="button">Publish to GitHub</button>
-          </div>
-        </footer>
+        <p id="editorStatus" class="status-message admin-status" role="status"></p>
       </section>
     </main>
     <script type="module" src="./admin.js"></script>

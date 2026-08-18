@@ -8,7 +8,11 @@ import ContactView from "./components/views/ContactView";
 import HomeView from "./components/views/HomeView";
 import PostsView from "./components/views/PostsView";
 import ResourcesView from "./components/views/ResourcesView";
-import { posts, site } from "./lib/content";
+import {
+  postCategories as publicPostCategories,
+  posts as publicPosts,
+  site,
+} from "./lib/content";
 
 const DESIGN_WIDTH = 1920;
 const DESIGN_HEIGHT = 1080;
@@ -52,13 +56,13 @@ function parseRoute(pathname) {
   };
 }
 
-function routePath(view, context = {}) {
+function routePath(view, context = {}, availablePosts = publicPosts) {
   if (view === "home") return "/";
   if (view !== "posts") return `/${view}`;
 
   let categoryId = context.categoryId;
   if (context.postSlug && !categoryId) {
-    categoryId = posts.find((post) => post.slug === context.postSlug)?.category;
+    categoryId = availablePosts.find((post) => post.slug === context.postSlug)?.category;
   }
 
   if (context.postSlug && categoryId) {
@@ -77,6 +81,7 @@ export default function LowkeyfiPage() {
   const [automaticScale, setAutomaticScale] = useState(1);
   const initialDevicePixelRatio = useRef(window.devicePixelRatio || 1);
   const [nativeZoomIsActive, setNativeZoomIsActive] = useState(false);
+  const [adminPreviewContent, setAdminPreviewContent] = useState(null);
   const [scaleIsReady, setScaleIsReady] = useState(false);
   const [isCompactLayout, setIsCompactLayout] = useState(false);
   const [designSize, setDesignSize] = useState({
@@ -86,6 +91,30 @@ export default function LowkeyfiPage() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(Boolean(document.fullscreenElement));
   const [isClosed, setIsClosed] = useState(false);
+
+  useEffect(() => {
+    function handleAdminPreview(event) {
+      if (
+        window.parent === window
+        ||
+        event.origin !== window.location.origin
+        || event.source !== window.parent
+        || event.data?.type !== "lowkeyfi-admin-preview"
+        || !Array.isArray(event.data.posts)
+        || !Array.isArray(event.data.postCategories?.categories)
+      ) {
+        return;
+      }
+
+      setAdminPreviewContent({
+        posts: event.data.posts,
+        postCategories: event.data.postCategories,
+      });
+    }
+
+    window.addEventListener("message", handleAdminPreview);
+    return () => window.removeEventListener("message", handleAdminPreview);
+  }, []);
 
   useEffect(() => {
     function updateWindowScale() {
@@ -149,6 +178,12 @@ export default function LowkeyfiPage() {
   }, []);
 
   const ActiveView = VIEW_COMPONENTS[route.view] ?? HomeView;
+  const availablePosts = adminPreviewContent?.posts ?? publicPosts;
+  const availablePostCategories = adminPreviewContent?.postCategories ?? publicPostCategories;
+  const availableFeaturedPost =
+    availablePosts.find((post) => post.featured)
+    ?? availablePosts[0]
+    ?? null;
   const windowScale = Math.max(
     isMinimized ? Math.min(automaticScale, 1) : automaticScale,
     0.1,
@@ -159,7 +194,7 @@ export default function LowkeyfiPage() {
   }), [designSize, windowScale]);
 
   function handleViewChange(viewId, nextContext = {}) {
-    const nextPath = routePath(viewId, nextContext);
+    const nextPath = routePath(viewId, nextContext, availablePosts);
     window.history.pushState({}, "", browserPath(nextPath));
     setRoute(parseRoute(browserPath(nextPath)));
     setIsClosed(false);
@@ -241,6 +276,10 @@ export default function LowkeyfiPage() {
                     onNavigate={handleViewChange}
                     initialCategoryId={route.categoryId}
                     initialPostSlug={route.postSlug}
+                    posts={availablePosts}
+                    postCategories={availablePostCategories}
+                    featuredPost={availableFeaturedPost}
+                    isAdminPreview={Boolean(adminPreviewContent)}
                   />
                 </section>
               </div>

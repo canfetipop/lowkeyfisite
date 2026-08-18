@@ -2,6 +2,7 @@
   "title": "my first PCB design",
   "slug": "my-first-pcb-design",
   "published": true,
+  "visibility": "public",
   "featured": true,
   "date": "2026-08-16",
   "excerpt": "STM32 Bluetooth, Phil's Lab.",

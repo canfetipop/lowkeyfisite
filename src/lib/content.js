@@ -14,7 +14,12 @@ const postModules = import.meta.glob("../content/posts/**/*.json", {
 export const site = siteContent;
 export const home = homeContent;
 export const about = aboutContent;
-export const postCategories = postCategoryContent;
+export const postCategories = {
+  ...postCategoryContent,
+  categories: postCategoryContent.categories.filter(
+    (category) => category.visibility !== "private",
+  ),
+};
 export const resources = resourceContent;
 export const contact = contactContent;
 export const navigation = navigationContent;
@@ -24,7 +29,10 @@ export const posts = Object.entries(postModules)
     ...post,
     category: post.category ?? path.match(/\/posts\/([^/]+)\//)?.[1],
   }))
-  .filter((post) => post.published)
+  .filter((post) =>
+    post.visibility === "public"
+    && postCategories.categories.some((category) => category.id === post.category),
+  )
   .sort((firstPost, secondPost) =>
     secondPost.date.localeCompare(firstPost.date),
   );

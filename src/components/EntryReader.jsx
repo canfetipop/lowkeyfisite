@@ -40,13 +40,19 @@ function ContentSection({ section, index }) {
   return <section className="article-text" key={index}><RichTextContent text={section.text} /></section>;
 }
 
-export default function EntryReader({ entry, categoryTitle, onBack, backLabel }) {
+export default function EntryReader({ adminVisibility = "", entry, categoryTitle, onBack, backLabel }) {
   const hasArticleBody = typeof entry.body === "string" && entry.body.trim().length > 0;
   const sections = entry.sections ?? [];
 
   return (
     <article className="post-reader">
       <button className="post-view-back" type="button" onClick={onBack}>← {backLabel}</button>
+
+      {adminVisibility && (
+        <span className={`admin-preview-badge admin-preview-badge--${adminVisibility}`}>
+          {adminVisibility.toUpperCase()}
+        </span>
+      )}
 
       <SectionHeading as="h1" size="large" showRule>{entry.title}</SectionHeading>
 

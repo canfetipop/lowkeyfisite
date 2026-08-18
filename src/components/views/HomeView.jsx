@@ -1,17 +1,26 @@
 import SectionHeading from "../SectionHeading";
 import {
   assetUrl,
-  featuredPost,
+  featuredPost as publicFeaturedPost,
   formatPostDate,
   home,
-  postCategories,
+  postCategories as publicPostCategories,
 } from "../../lib/content";
 
-export default function HomeView({ onNavigate }) {
+export default function HomeView({
+  featuredPost = publicFeaturedPost,
+  isAdminPreview = false,
+  onNavigate,
+  postCategories = publicPostCategories,
+}) {
   const latestPost = featuredPost;
   const latestCategory = postCategories.categories.find(
     (category) => category.id === latestPost?.category,
   );
+  const latestVisibility = latestPost?.visibility === "public"
+    && latestCategory?.visibility === "public"
+    ? "public"
+    : "private";
   const latestImage = latestPost?.image || latestCategory?.icon;
 
   function openLatestPost() {
@@ -64,6 +73,11 @@ export default function HomeView({ onNavigate }) {
               </button>
 
               <div className="latest-post__content">
+                {isAdminPreview && (
+                  <span className={`admin-preview-badge admin-preview-badge--${latestVisibility}`}>
+                    {latestVisibility.toUpperCase()}
+                  </span>
+                )}
                 <button
                   type="button"
                   onClick={openLatestPost}

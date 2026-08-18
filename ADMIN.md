@@ -1,65 +1,71 @@
-# LowKeyFI admin guide
+# LowKeyFI private-content admin guide
 
-LowKeyFI uses GitHub as its content store. It does not require a database.
+LowKeyFI uses two GitHub repositories and does not require a database or paid
+backend.
+
+- `emaeveky/lowkeyfi-content` is private and is the source of truth for every
+  post, category, draft, and post image.
+- `canfetipop/lowkeyfisite` is public and contains only the snapshot that the
+  admin dashboard has synchronized as public.
 
 ## One-time setup
 
-1. Merge the `codex/admin-cms` branch into `main`.
-2. In the repository settings, open **Pages** and select **GitHub Actions** as the source.
-3. Visit [Pages CMS](https://app.pagescms.org), sign in with the GitHub account that owns the repository, and install/authorize the Pages CMS GitHub App for `lowkeyfisite`.
-4. Select the `canfetipop/lowkeyfisite` repository and the `main` branch.
+1. Sign in to GitHub as `canfetipop` and accept the collaborator invitation for
+   `emaeveky/lowkeyfi-content` if you plan to use that account in PagesCMS.
+2. Open [PagesCMS](https://app.pagescms.org), authorize its GitHub App for the
+   private `emaeveky/lowkeyfi-content` repository, and select its `main` branch.
+3. Create a GitHub personal access token for the admin dashboard. It must be
+   able to read/write the private content repository and push to the public
+   website repository. A classic token from an account that can access both
+   repositories is the most compatible option for this cross-owner setup.
+4. Open `/lowkeyfisite/admin/`, enter the token, and use **Sync public site**.
 
-The site's `/admin/` page includes a focused post/resource writing editor and a
-shortcut to PagesCMS for full-site configuration.
+The dashboard keeps the token only in `sessionStorage`. Closing the tab signs
+the dashboard out. The token is never committed to either repository.
 
-## Writing editor
+## Visibility rules
 
-The writing editor saves drafts to the current browser automatically. Browser
-drafts do not create Git commits or deployments. Use **Publish to GitHub** when
-the draft is ready; publishing creates one commit and starts the Pages workflow.
+- A public post is deployed only when its category is also public.
+- Making a category private removes that category and every post inside it from
+  the next public snapshot.
+- Making a post private removes its JSON from the current public source tree.
+- Private posts are fetched only after the dashboard authenticates with GitHub.
+- The public build fails if a private category or post is accidentally present
+  under `src/content`.
 
-The editor asks for a fine-grained GitHub access token with Contents read/write
-permission for only `canfetipop/lowkeyfisite`. It stores that token in
-`sessionStorage`, so closing the browser tab signs the editor out. The token is
-never included in the website source or committed to the repository.
+The private repository keeps all versions. The public repository intentionally
+keeps only currently publishable JSON files.
 
-Useful shortcuts:
+## Editing workflow
 
-- `Ctrl+K`: add a link
-- `Ctrl+B`: bold
-- `Ctrl+I`: italic
-- `Ctrl+Alt+2` / `Ctrl+Alt+3`: heading
-- `Ctrl+S`: save the browser draft immediately
-- `Ctrl+Shift+S`: publish to GitHub
+Use PagesCMS on `emaeveky/lowkeyfi-content` for full rich-text and media editing.
+Its configuration provides `Public` and `Private` visibility choices for both
+categories and posts.
 
-PagesCMS remains the editor for site colors, navigation, images, and other page
-settings.
+Use the authenticated dashboard for:
 
-## What is editable
+- Exact public-site preview with public/private badges
+- Category and post visibility toggles
+- Focused post editing and keyboard shortcuts
+- Synchronizing the sanitized public snapshot
+- Viewing current GitHub Pages deployment status
 
-- Site window title, status text, update date, colors, and corner style
-- Homepage heading, introduction, image, and current status
-- About page image and paragraphs
-- Post, Lab, and Resource category text and icons
-- Contact links and the support card
-- Posts, including cover images, publish state, date, category, excerpt, and body
+Saving in private PagesCMS does not publish automatically. This is deliberate:
+open the dashboard afterward, review the combined preview, and click
+**Sync public site**.
 
-## Publishing
+## Historical limitation
 
-Saving in Pages CMS commits the edited content to GitHub. A commit to `main`
-starts the GitHub Pages workflow in `.github/workflows/deploy-pages.yml`.
-The site normally updates after the workflow finishes.
+Posts previously committed to the public repository may remain recoverable in
+its Git history even after removal. Do not treat those old versions as secret.
+Future private drafts remain only in the private repository.
 
-Uploaded images are stored in `public/images/uploads` and remain part of the
-repository and its Git history.
+Rewriting the public repository's history is a separate destructive operation
+and should be done only after creating a backup and confirming that old public
+links and integrations can tolerate the rewrite.
 
 ## Future custom domain
 
-Do not change the deployment until `lowkey-fi.com` has been purchased. When the
-domain is ready, configure it under the repository's **Settings > Pages**, add
-the DNS records GitHub provides, and set `LOWKEYFI_CUSTOM_DOMAIN: "true"` for
-the build step in `.github/workflows/deploy-pages.yml`. This switches Vite from
-`/lowkeyfisite/` asset paths to root-domain paths without changing content URLs.
-
-This repository deploys with GitHub Actions, so a committed `CNAME` file is not
-required; GitHub's Pages settings are the source of truth for the domain.
+When `lowkey-fi.com` is ready, configure it under the public repository's
+**Settings > Pages** and set `LOWKEYFI_CUSTOM_DOMAIN: "true"` for the build step
+in `.github/workflows/deploy-pages.yml`.

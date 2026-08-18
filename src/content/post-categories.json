@@ -4,24 +4,28 @@
   "categories": [
     {
       "id": "money",
+      "visibility": "public",
       "title": "Money",
       "description": "Budgeting, saving, investing, FIRE, and money notes.",
       "icon": "/images/posts/money.png"
     },
     {
       "id": "exploring",
+      "visibility": "public",
       "title": "Exploring",
       "description": "Projects, learning, hobbies, experiments, and personal growth.",
       "icon": "/images/lab/exploring.png"
     },
     {
       "id": "travel",
+      "visibility": "public",
       "title": "Travel",
       "description": "Trips, costs, itineraries, and travel reflections.",
       "icon": "/images/posts/travel.png"
     },
     {
       "id": "guides",
+      "visibility": "public",
       "title": "Guides",
       "description": "How-to guides and helpful setup posts.",
       "icon": "/images/posts/guides.png"

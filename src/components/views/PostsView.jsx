@@ -1,8 +1,20 @@
 import EntryReader from "../EntryReader";
 import SectionHeading from "../SectionHeading";
-import { assetUrl, formatPostDate, postCategories, posts } from "../../lib/content";
+import {
+  assetUrl,
+  formatPostDate,
+  postCategories as publicPostCategories,
+  posts as publicPosts,
+} from "../../lib/content";
 
-export default function PostsView({ initialCategoryId, initialPostSlug, onNavigate }) {
+export default function PostsView({
+  initialCategoryId,
+  initialPostSlug,
+  isAdminPreview = false,
+  onNavigate,
+  postCategories = publicPostCategories,
+  posts = publicPosts,
+}) {
   const selectedPost = posts.find((post) => post.slug === initialPostSlug);
   const selectedCategory = postCategories.categories.find((category) => category.id === initialCategoryId);
   const categoryPosts = posts.filter((post) => post.category === initialCategoryId);
@@ -11,8 +23,9 @@ export default function PostsView({ initialCategoryId, initialPostSlug, onNaviga
     return (
       <EntryReader
         entry={selectedPost}
-        categoryTitle={categoryTitle(selectedPost.category)}
-        backLabel={`Back to ${categoryTitle(selectedPost.category)}`}
+        adminVisibility={isAdminPreview ? effectiveVisibility(selectedPost, categoryFor(postCategories, selectedPost.category)) : ""}
+        categoryTitle={categoryTitle(postCategories, selectedPost.category)}
+        backLabel={`Back to ${categoryTitle(postCategories, selectedPost.category)}`}
         onBack={() => onNavigate("posts", { categoryId: selectedPost.category })}
       />
     );
@@ -22,6 +35,11 @@ export default function PostsView({ initialCategoryId, initialPostSlug, onNaviga
     return (
       <div className="posts-view">
         <button className="post-view-back" type="button" onClick={() => onNavigate("posts")}>← All categories</button>
+        {isAdminPreview && (
+          <span className={`admin-preview-badge admin-preview-badge--${selectedCategory.visibility ?? "private"}`}>
+            {(selectedCategory.visibility ?? "private").toUpperCase()}
+          </span>
+        )}
         <SectionHeading as="h1" size="large" showRule>{selectedCategory.title}</SectionHeading>
 
         <div className="post-entry-list post-entry-list--category">
@@ -34,6 +52,11 @@ export default function PostsView({ initialCategoryId, initialPostSlug, onNaviga
             >
               {post.image && <img src={assetUrl(post.image)} alt="" aria-hidden="true" />}
               <span className="post-entry-card__content">
+                {isAdminPreview && (
+                  <span className={`admin-preview-badge admin-preview-badge--${effectiveVisibility(post, selectedCategory)}`}>
+                    {effectiveVisibility(post, selectedCategory).toUpperCase()}
+                  </span>
+                )}
                 <strong>{post.title}</strong>
                 <small>{formatPostDate(post.date)}</small>
                 <span>{post.excerpt}</span>
@@ -66,6 +89,11 @@ export default function PostsView({ initialCategoryId, initialPostSlug, onNaviga
               <img src={assetUrl(category.icon)} alt="" draggable="false" />
             </span>
             <span className="post-category-card__content">
+              {isAdminPreview && (
+                <span className={`admin-preview-badge admin-preview-badge--${category.visibility ?? "private"}`}>
+                  {(category.visibility ?? "private").toUpperCase()}
+                </span>
+              )}
               <strong>{category.title}</strong>
               <span>{category.description}</span>
             </span>
@@ -77,6 +105,16 @@ export default function PostsView({ initialCategoryId, initialPostSlug, onNaviga
   );
 }
 
-function categoryTitle(categoryId) {
+function categoryTitle(postCategories, categoryId) {
   return postCategories.categories.find((category) => category.id === categoryId)?.title ?? categoryId;
+}
+
+function effectiveVisibility(post, category) {
+  return post.visibility === "public" && category?.visibility === "public"
+    ? "public"
+    : "private";
+}
+
+function categoryFor(postCategories, categoryId) {
+  return postCategories.categories.find((category) => category.id === categoryId);
 }
